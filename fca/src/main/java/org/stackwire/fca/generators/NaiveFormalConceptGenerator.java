@@ -20,10 +20,10 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.stackwire.fca.FormalConcept;
-import org.stackwire.fca.FormalConceptGenerator;
-import org.stackwire.fca.FormalContext;
 import org.stackwire.fca.FormalConcept.Extent;
 import org.stackwire.fca.FormalConcept.Intent;
+import org.stackwire.fca.FormalConceptGenerator;
+import org.stackwire.fca.FormalContext;
 import org.stackwire.fca.operators.AttributesCommonToObjectsFunction;
 
 /**

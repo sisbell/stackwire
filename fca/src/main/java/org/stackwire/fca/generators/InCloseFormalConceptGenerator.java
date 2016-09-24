@@ -29,15 +29,21 @@ import org.stackwire.fca.FormalContext;
  */
 public final class InCloseFormalConceptGenerator implements FormalConceptGenerator {
 
+	private ArrayList<ArrayList<Integer>> A = new ArrayList<>();
+
+	private ArrayList<ArrayList<Integer>> B = new ArrayList<>();
+
 	@Override
 	public FormalContext generateConceptsFor(FormalContext formalContext) {
 		FormalConcept sup = FormalConcept.newSupremum(formalContext.objectCount() - 1);
-		A.add(sup.getExtent().getIndicies());
+		formalContext.addFormalConcept(sup);
+		
+		A.add(new ArrayList<>(sup.getExtent().getIndicies()));
 		B.add(new ArrayList<>());
 
 		inClose(formalContext, 0, 0);
 		for (int i = 0; i < A.size(); i++) {
-			if(!A.get(i).isEmpty() && !B.get(i).isEmpty()) {
+			if(!B.get(i).isEmpty()) {
 				formalContext.addFormalConcept(FormalConcept.create(i, new Extent(A.get(i)), new Intent(B.get(i))));
 			}	
 		}
@@ -115,9 +121,5 @@ public final class InCloseFormalConceptGenerator implements FormalConceptGenerat
 		}
 		return true;
 	}
-
-	private ArrayList<ArrayList<Integer>> A = new ArrayList<>();
-
-	private ArrayList<ArrayList<Integer>> B = new ArrayList<>();
 
 }

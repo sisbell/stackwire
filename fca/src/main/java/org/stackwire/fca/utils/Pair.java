@@ -13,24 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.stackwire.fca;
+package org.stackwire.fca.utils;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+public class Pair<T, U> {
+	public final T t;
+	public final U u;
 
-public class Utils {
-
-	public static List<Integer> range(int start, int end) {
-		return IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
-	}
-	
-	public static Set<Integer> rangeSet(int start, int end) {
-		return IntStream.rangeClosed(start, end).boxed().collect(Collectors.toSet());
-	}
-	
-	public static IntStream rangeStream(int start, int end) {
-		return IntStream.rangeClosed(start, end);
+	public Pair(T t, U u) {
+		this.t = t;
+		this.u = u;
 	}
 }

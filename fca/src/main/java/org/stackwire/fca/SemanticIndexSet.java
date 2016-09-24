@@ -15,74 +15,34 @@
  */
 package org.stackwire.fca;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SemanticIndexSet {
 
-	protected final ArrayList<Integer> indicies = new ArrayList<>();
-	
-	public SemanticIndexSet() {		
+	protected final Set<Integer> indicies = new HashSet<>();
+
+	public SemanticIndexSet() {
 	}
-	
-	public SemanticIndexSet(int index) {
-		indicies.add(index);
-	}
-	
+
 	public SemanticIndexSet(Collection<Integer> indicies) {
 		this.indicies.addAll(indicies);
 	}
-	
+
+	public SemanticIndexSet(int index) {
+		indicies.add(index);
+	}
+
 	public SemanticIndexSet addIndex(Integer object) {
 		if (!indicies.contains(object)) {
 			indicies.add(object);
 		}
 		return this;
-	}
-	
-	public boolean isEmpty() {
-		return !indicies.isEmpty();
-	}
-	
-	public int getCount() {
-		return indicies.size();
-	}
-	
-	public Integer getIndex(int i) {
-		return indicies.get(i);
-	}
-	
-	public ArrayList<Integer> getIndicies() {
-		return indicies;
-	}
-	
-	public List<Integer> filter(Predicate<Integer> p) {
-		return indicies.stream().filter(p).collect(Collectors.toList());
-	}
-	
-	public Stream<Integer> stream() {
-		return indicies.stream();
-	}
-	
-	public boolean hasIndex(int i) {
-		return indicies.contains(i);
-	}
-
-	@Override
-	public String toString() {
-		return indicies.toString();
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((indicies == null) ? 0 : indicies.hashCode());
-		return result;
 	}
 
 	@Override
@@ -100,5 +60,62 @@ public class SemanticIndexSet {
 		} else if (!indicies.containsAll(other.getIndicies()))
 			return false;
 		return true;
+	}
+
+	public Set<Integer> filter(Predicate<Integer> p) {
+		return indicies.stream().filter(p).collect(Collectors.toSet());
+	}
+
+	/**
+	 * First index
+	 * 
+	 * @return
+	 */
+	public Optional<Integer> first() {
+		return indicies.stream().findFirst();
+	}
+
+	public int getCount() {
+		return indicies.size();
+	}
+
+	public Set<Integer> getIndicies() {
+		return indicies;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((indicies == null) ? 0 : indicies.hashCode());
+		return result;
+	}
+	
+	public boolean hasIndex(int i) {
+		return indicies.contains(i);
+	}
+	
+	public boolean isEmpty() {
+		return !indicies.isEmpty();
+	}
+
+	/**
+	 * Only keep first element of indicies
+	 */
+	public void keepFirst() {
+		Optional<Integer> first = first();
+		if(first.isPresent()) {
+			indicies.clear();
+			indicies.add(first.get());
+		}	
+	}
+
+	public Stream<Integer> stream() {
+		return indicies.stream();
+	}
+
+	@Override
+	public String toString() {
+		return indicies.toString();
 	}
 }

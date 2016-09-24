@@ -20,6 +20,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.stackwire.fca.utils.Utils;
+
 /**
  * This is operator B'
  */
@@ -32,6 +34,9 @@ public class AttributesCommonToObjectsFunction implements Function<Collection<In
 	}
 
 	public Set<Integer> apply(Collection<Integer> indicies) { // objects
+		if(indicies == null || indicies.isEmpty()) {
+			return Utils.rangeSet(0, relations[0].length - 1);
+		}
 		Set<Integer> attributes = new HashSet<>();
 		int cols = relations[0].length;
 		for (int j = 0; j < cols; j++) {

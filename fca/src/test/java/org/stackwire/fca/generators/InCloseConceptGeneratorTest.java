@@ -15,14 +15,18 @@
  */
 package org.stackwire.fca.generators;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Test;
 import org.stackwire.fca.FormalConcept;
+import org.stackwire.fca.FormalConcept.Extent;
+import org.stackwire.fca.FormalConcept.Intent;
+
 import org.stackwire.fca.FormalContext;
-import org.stackwire.fca.generators.NaiveFormalConceptGenerator;
 
 public class InCloseConceptGeneratorTest {
 
@@ -35,7 +39,18 @@ public class InCloseConceptGeneratorTest {
 		InCloseFormalConceptGenerator generator = new InCloseFormalConceptGenerator();
 		generator.generateConceptsFor(fc);
 		Collection<FormalConcept> result = fc.getFormalConcepts();
-		System.out.println(fc.getFormalConcepts());
-		assertEquals(3, result.size());
+		assertEquals(4, result.size());
+
+		FormalConcept fc0 = FormalConcept.create(0, new Extent(Arrays.asList(1, 3)),
+				new Intent(Arrays.asList(0, 1, 2, 3)));
+		FormalConcept fc1 = FormalConcept.create(0, new Extent(Arrays.asList(1, 2, 3)),
+				new Intent(Arrays.asList(1, 2)));
+		FormalConcept fc2 = FormalConcept.create(0, new Extent(Arrays.asList(1, 2, 3, 5)),
+				new Intent(Arrays.asList(1)));
+		FormalConcept fc3 = FormalConcept.create(0, new Extent(Arrays.asList(0, 1, 2, 3, 4, 5)),
+				new Intent(Arrays.asList()));
+
+		List<FormalConcept> expectedConcepts = Arrays.asList(fc0, fc1, fc2, fc3);
+		assertTrue(result.containsAll(expectedConcepts));
 	}
 }

@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Set;
 
 import org.junit.Test;
-import org.stackwire.fca.operators.AttributesCommonToObjectsFunction;
 
 public class AttributesCommonToObjectsFunctionTest {
 
@@ -37,16 +36,24 @@ public class AttributesCommonToObjectsFunctionTest {
 	}
 	
 	@Test
-	public void intersection() throws Exception {
-		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
-		Set<Integer> result = function.apply(Arrays.asList(1, 2));		
-		assertThat(result, hasItems(1, 2));
-	}
-	
-	@Test
 	public void empty() throws Exception {
 		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
 		Set<Integer> result = function.apply(Arrays.asList(0));		
 		assertEquals(0, result.size());
+	}
+	
+	@Test
+	public void nullParam() throws Exception {
+		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
+		Set<Integer> result = function.apply(null);		
+		assertEquals(4, result.size());
+	}
+	
+	
+	@Test
+	public void intersection() throws Exception {
+		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
+		Set<Integer> result = function.apply(Arrays.asList(1, 2));		
+		assertThat(result, hasItems(1, 2));
 	}
 }

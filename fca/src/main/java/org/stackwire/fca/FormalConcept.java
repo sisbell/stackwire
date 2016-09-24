@@ -16,11 +16,11 @@
 package org.stackwire.fca;
 
 import java.util.Collection;
-import java.util.ListIterator;
 import java.util.Set;
 
 import org.stackwire.fca.operators.AttributesCommonToObjectsFunction;
 import org.stackwire.fca.operators.ObjectsCommonToAttributesFunction;
+import org.stackwire.fca.utils.Utils;
 
 /**
  * Set of objects with the same attributes
@@ -36,12 +36,12 @@ public final class FormalConcept {
 			super();
 		}
 
-		public Extent(int index) {
-			super(index);
-		}
-
 		public Extent(Collection<Integer> indicies) {
 			super(indicies);
+		}
+
+		public Extent(int index) {
+			super(index);
 		}
 	}
 
@@ -54,16 +54,12 @@ public final class FormalConcept {
 			super();
 		}
 
-		public Intent(int index) {
-			super(index);
-		}
-
 		public Intent(Collection<Integer> indicies) {
 			super(indicies);
 		}
 
-		public ListIterator<Integer> getReversedIndiciesIterator() {
-			return indicies.listIterator(getCount());
+		public Intent(int index) {
+			super(index);
 		}
 	}
 
@@ -73,26 +69,6 @@ public final class FormalConcept {
 
 	public static FormalConcept create(int index, Extent extent, Intent intent) {
 		return new FormalConcept(index, extent, intent);
-	}
-
-	/**
-	 * Returns true if formal concept is valid, otherwise false. 
-	 * 
-	 * Requires the following to be true: A''= B' = A
-	 * 
-	 * @param formalContext formal context associated with this formal concept
-	 * @return true if formal concept is valid, otherwise false
-	 */
-	public boolean validate(FormalContext formalContext) {
-		AttributesCommonToObjectsFunction attributesFunction = new AttributesCommonToObjectsFunction(
-				formalContext.getRelations());
-		ObjectsCommonToAttributesFunction objectsFunction = new ObjectsCommonToAttributesFunction(
-				formalContext.getRelations());
-		Set<Integer> result = attributesFunction.andThen(objectsFunction).apply(this.getExtent().getIndicies());
-		if (getExtent().getCount() == 0 || getIntent().getCount() == 0 || result.size() != getExtent().getCount()) {
-			return false;
-		}
-		return result.containsAll(getExtent().getIndicies()) && getExtent().getIndicies().containsAll(result);
 	}
 
 	/**
@@ -147,5 +123,62 @@ public final class FormalConcept {
 	public String toString() {
 		return "\r\nFormalConcept [index=" + index + ", extent=" + extent + ", intent=" + intent + "]";
 	}
+
+	/**
+	 * Returns true if formal concept is valid, otherwise false. 
+	 * 
+	 * Requires the following to be true: A''= B' = A
+	 * 
+	 * @param formalContext formal context associated with this formal concept
+	 * @return true if formal concept is valid, otherwise false
+	 */
+	public boolean validate(FormalContext formalContext) {
+		if(formalContext == null) {
+			throw new IllegalArgumentException("formalContext is null");
+		}
+		AttributesCommonToObjectsFunction attributesFunction = new AttributesCommonToObjectsFunction(
+				formalContext.getRelations());
+		ObjectsCommonToAttributesFunction objectsFunction = new ObjectsCommonToAttributesFunction(
+				formalContext.getRelations());
+		Set<Integer> result = attributesFunction.andThen(objectsFunction).apply(this.getExtent().getIndicies());
+		
+		if (result.size() != getExtent().getCount()) {
+			return false;
+		}
+		return result.containsAll(getExtent().getIndicies()) && getExtent().getIndicies().containsAll(result);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((extent == null) ? 0 : extent.hashCode());
+		result = prime * result + ((intent == null) ? 0 : intent.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FormalConcept other = (FormalConcept) obj;
+		if (extent == null) {
+			if (other.extent != null)
+				return false;
+		} else if (!extent.equals(other.extent))
+			return false;
+		if (intent == null) {
+			if (other.intent != null)
+				return false;
+		} else if (!intent.equals(other.intent))
+			return false;
+		return true;
+	}
+	
+	
 
 }

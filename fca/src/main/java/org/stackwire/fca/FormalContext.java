@@ -17,36 +17,40 @@ package org.stackwire.fca;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
+
+import org.stackwire.fca.Clarifier.ClarifierResult;
+import org.stackwire.fca.utils.Utils;
 
 import com.google.common.collect.Sets;
 
 public class FormalContext {
 
+	public static FormalContext create(int objectCount, int attributeCount) {
+		return new FormalContext(generateAnon(objectCount, "x"), generateAnon(attributeCount, "y"));
+	}
+
 	public static FormalContext create(int[][] relations) {
-		return new FormalContext(generateAnon(relations.length, "obj"), generateAnon(relations[0].length, "attr"),
+		return new FormalContext(generateAnon(relations.length, "x"), generateAnon(relations[0].length, "y"),
 				relations);
 	}
 
-	public static FormalContext create(int objectCount, int attributeCount) {
-		return new FormalContext(generateAnon(objectCount, "obj"), generateAnon(attributeCount, "attr"));
+	public static FormalContext create(List<String> objectNames, List<String> attributeNames) {
+		return new FormalContext(objectNames, attributeNames);
+	}
+
+	public static FormalContext create(List<String> objectNames, List<String> attributeNames, int[][] relations) {
+		return new FormalContext(objectNames, attributeNames, relations);
 	}
 
 	private static ArrayList<String> generateAnon(int count, String prefix) {
 		ArrayList<String> s = new ArrayList<>();
-		for (int i = 0; i < count; i++) {
-			s.add(prefix + "-" + i);
+		for (int i = 1; i <= count; i++) {
+			s.add(prefix + i);
 		}
 		return s;
-	}
-
-	public static FormalContext create(ArrayList<String> objectNames, ArrayList<String> attributeNames) {
-		return new FormalContext(objectNames, attributeNames);
-	}
-
-	public static FormalContext create(ArrayList<String> objectNames, ArrayList<String> attributeNames,
-			int[][] relations) {
-		return new FormalContext(objectNames, attributeNames, relations);
 	}
 
 	/**
@@ -60,11 +64,11 @@ public class FormalContext {
 
 	private final Collection<FormalConcept> formalConcepts = new ArrayList<>();
 
-	private FormalContext(ArrayList<String> objectNames, ArrayList<String> attributeNames) {
+	private FormalContext(List<String> objectNames, List<String> attributeNames) {
 		this(objectNames, attributeNames, null);
 	}
 
-	private FormalContext(ArrayList<String> objectNames, ArrayList<String> attributeNames, int[][] relations) {
+	private FormalContext(List<String> objectNames, List<String> attributeNames, int[][] relations) {
 		if (objectNames == null || objectNames.isEmpty()) {
 			throw new IllegalArgumentException("objectNames is empty");
 		}
@@ -72,25 +76,13 @@ public class FormalContext {
 		if (attributeNames == null || attributeNames.isEmpty()) {
 			throw new IllegalArgumentException("attributesNames is empty");
 		}
-		this.objectNames = objectNames;
-		this.attributeNames = attributeNames;
+		this.objectNames = new ArrayList<>(objectNames);
+		this.attributeNames = new ArrayList<>(attributeNames);
 		if (relations == null) {
 			this.relations = new int[objectNames.size()][attributeNames.size()];
 		} else {
 			this.relations = relations;
 		}
-	}
-
-	public Set<Set<Integer>> powerSetOfObjects() {
-		return Sets.powerSet(Utils.rangeSet(0, objectNames.size() - 1));
-	}
-
-	public Set<Set<Integer>> powerSetOfAttributes() {
-		return Sets.powerSet(Utils.rangeSet(0, attributeNames.size() - 1));
-	}
-
-	public void addFormalConcepts(Collection<FormalConcept> concepts) {
-		formalConcepts.addAll(concepts);
 	}
 
 	/**
@@ -101,6 +93,10 @@ public class FormalContext {
 	 */
 	public void addFormalConcept(FormalConcept formalConcept) {
 		formalConcepts.add(formalConcept);
+	}
+
+	public void addFormalConcepts(Collection<FormalConcept> concepts) {
+		formalConcepts.addAll(concepts);
 	}
 
 	/**
@@ -114,12 +110,51 @@ public class FormalContext {
 	}
 
 	/**
+	 * Returns true if each object has the specified attribute, otherwise false
+	 * 
+	 * @param objectIndicies
+	 *            object indicies
+	 * @param attributeIndex
+	 * @return true if each object has the specified attribute, otherwise false
+	 */
+	public boolean allObjectsHaveAttribute(Collection<Integer> objectIndicies, int attributeIndex) {
+		for (Integer objectIndex : objectIndicies) {
+			if (!hasRelation(objectIndex, attributeIndex)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Count of all objects belonging to this context
 	 * 
 	 * @return count of all objects belonging to this context
 	 */
 	public int attributeCount() {
 		return attributeNames.size();
+	}
+
+	public FormalContext clarify() {
+		ClarifierResult result = Clarifier.clarify(relations);
+
+		
+		List<String> newObjectNames = new ArrayList<String>(objectNames);
+		for(int rowIndex : result.getDuplicateRows()) {
+			newObjectNames.remove(rowIndex);
+		}
+
+		List<String> newAttributeNames = new ArrayList<String>(attributeNames);
+		for(int columnIndex : result.getDuplicateColumns()) {
+			newAttributeNames.remove(columnIndex);
+		}
+		
+		return FormalContext.create(newObjectNames, 
+				newAttributeNames, result.getClarifiedCrossTable());
+	}
+
+	public List<String> getAttributeNames() {
+		return Collections.unmodifiableList(attributeNames);
 	}
 
 	/**
@@ -129,6 +164,14 @@ public class FormalContext {
 	 */
 	public Collection<FormalConcept> getFormalConcepts() {
 		return formalConcepts;
+	}
+
+	public List<String> getObjectNames() {
+		return Collections.unmodifiableList(objectNames);
+	}
+
+	public int[][] getRelations() {
+		return relations;
 	}
 
 	/**
@@ -156,21 +199,12 @@ public class FormalContext {
 		return objectNames.size();
 	}
 
-	/**
-	 * Returns true if each object has the specified attribute, otherwise false
-	 * 
-	 * @param objectIndicies
-	 *            object indicies
-	 * @param attributeIndex
-	 * @return true if each object has the specified attribute, otherwise false
-	 */
-	public boolean allObjectsHaveAttribute(Collection<Integer> objectIndicies, int attributeIndex) {
-		for (Integer objectIndex : objectIndicies) {
-			if (!hasRelation(objectIndex, attributeIndex)) {
-				return false;
-			}
-		}
-		return true;
+	public Set<Set<Integer>> powerSetOfAttributes() {
+		return Sets.powerSet(Utils.rangeSet(0, attributeNames.size() - 1));
+	}
+
+	public Set<Set<Integer>> powerSetOfObjects() {
+		return Sets.powerSet(Utils.rangeSet(0, objectNames.size() - 1));
 	}
 
 	public void printRelations() {
@@ -184,7 +218,7 @@ public class FormalContext {
 		}
 	}
 
-	public int[][] getRelations() {
-		return relations;
+	public FormalContext reduce() {
+		return null;
 	}
 }
