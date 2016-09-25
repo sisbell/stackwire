@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.stackwire.fca.Clarifier.ClarifierResult;
+import org.stackwire.fca.Concept.Extent;
+import org.stackwire.fca.Concept.Intent;
+import org.stackwire.fca.operators.AttributesCommonToObjectsFunction;
+import org.stackwire.fca.operators.ObjectsCommonToAttributesFunction;
 import org.stackwire.fca.utils.Utils;
 
 import com.google.common.collect.Sets;
@@ -54,6 +58,44 @@ public class FormalContext {
 	}
 
 	/**
+	 * Returns concept type
+	 * 
+	 * FORMAL_CONCEPT: Requires the following to be true: A''= B' = A
+	 * 
+	 * @param formalContext
+	 *            formal context associated with this formal concept
+	 * @return concept type
+	 */
+	public static ConceptType getConceptType(FormalContext formalContext, Extent extent, Intent intent) {
+		if (formalContext == null) {
+			throw new IllegalArgumentException("formalContext is null");
+		}
+		AttributesCommonToObjectsFunction attributesFunction = new AttributesCommonToObjectsFunction(
+				formalContext.getRelations());
+		ObjectsCommonToAttributesFunction objectsFunction = new ObjectsCommonToAttributesFunction(
+				formalContext.getRelations());
+
+		Set<Integer> aOpr = attributesFunction.apply(extent.getIndicies());
+		Set<Integer> bOpr = objectsFunction.apply(intent.getIndicies());
+
+		boolean BContainsAOpr = intent.getIndicies().containsAll(aOpr);
+		boolean AContainsBOpr = extent.getIndicies().containsAll(bOpr);
+
+		boolean x = aOpr.containsAll(intent.getIndicies()) && BContainsAOpr;
+		boolean y = bOpr.containsAll(extent.getIndicies()) && AContainsBOpr;
+
+		if (x && y) {
+			return ConceptType.FORMAL_CONCEPT;
+		} else if (x || y) {
+			return ConceptType.SEMICONCEPT;
+		} else if (BContainsAOpr && AContainsBOpr) {
+			return ConceptType.PRECONCEPT;
+		}
+
+		return ConceptType.UNKNOWN;
+	}
+
+	/**
 	 * Boolean matrix of relations.
 	 */
 	private final int[][] relations;
@@ -62,7 +104,11 @@ public class FormalContext {
 
 	private final ArrayList<String> objectNames;
 
-	private final Collection<FormalConcept> formalConcepts = new ArrayList<>();
+	private final Collection<Concept> formalConcepts = new ArrayList<>();
+
+	private final Collection<Concept> preConcepts = new ArrayList<>();
+
+	private final Collection<Concept> semiConcepts = new ArrayList<>();
 
 	private FormalContext(List<String> objectNames, List<String> attributeNames) {
 		this(objectNames, attributeNames, null);
@@ -86,16 +132,26 @@ public class FormalContext {
 	}
 
 	/**
-	 * Add formal concept to this context
+	 * Add formal concept to this context. Returns true if successfully added to
+	 * context, otherwise false.
 	 * 
-	 * @param formalConcept
-	 *            formal concept to add
+	 * @param concept
+	 * @param conceptType
+	 * @return true if successfully added to context, otherwise false
 	 */
-	public void addFormalConcept(FormalConcept formalConcept) {
-		formalConcepts.add(formalConcept);
+	public boolean addConcept(Concept formalConcept) {
+		ConceptType type = formalConcept.getConceptType();
+		if (ConceptType.FORMAL_CONCEPT.equals(type)) {
+			return formalConcepts.add(formalConcept);
+		} else if (ConceptType.PRECONCEPT.equals(type)) {
+			return preConcepts.add(formalConcept);
+		} else if (ConceptType.SEMICONCEPT.equals(type)) {
+			return semiConcepts.add(formalConcept);
+		}
+		return false;
 	}
 
-	public void addFormalConcepts(Collection<FormalConcept> concepts) {
+	public void addFormalConcepts(Collection<Concept> concepts) {
 		formalConcepts.addAll(concepts);
 	}
 
@@ -138,19 +194,17 @@ public class FormalContext {
 	public FormalContext clarify() {
 		ClarifierResult result = Clarifier.clarify(relations);
 
-		
 		List<String> newObjectNames = new ArrayList<String>(objectNames);
-		for(int rowIndex : result.getDuplicateRows()) {
+		for (int rowIndex : result.getDuplicateRows()) {
 			newObjectNames.remove(rowIndex);
 		}
 
 		List<String> newAttributeNames = new ArrayList<String>(attributeNames);
-		for(int columnIndex : result.getDuplicateColumns()) {
+		for (int columnIndex : result.getDuplicateColumns()) {
 			newAttributeNames.remove(columnIndex);
 		}
-		
-		return FormalContext.create(newObjectNames, 
-				newAttributeNames, result.getClarifiedCrossTable());
+
+		return FormalContext.create(newObjectNames, newAttributeNames, result.getClarifiedCrossTable());
 	}
 
 	public List<String> getAttributeNames() {
@@ -162,7 +216,7 @@ public class FormalContext {
 	 * 
 	 * @return all formal concepts belonging to this context
 	 */
-	public Collection<FormalConcept> getFormalConcepts() {
+	public Collection<Concept> getFormalConcepts() {
 		return formalConcepts;
 	}
 

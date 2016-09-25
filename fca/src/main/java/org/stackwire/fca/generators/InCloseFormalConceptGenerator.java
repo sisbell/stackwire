@@ -17,9 +17,10 @@ package org.stackwire.fca.generators;
 
 import java.util.ArrayList;
 
-import org.stackwire.fca.FormalConcept;
-import org.stackwire.fca.FormalConcept.Extent;
-import org.stackwire.fca.FormalConcept.Intent;
+import org.stackwire.fca.Concept;
+import org.stackwire.fca.Concept.Extent;
+import org.stackwire.fca.Concept.Intent;
+import org.stackwire.fca.ConceptType;
 import org.stackwire.fca.FormalConceptGenerator;
 import org.stackwire.fca.FormalContext;
 
@@ -35,17 +36,19 @@ public final class InCloseFormalConceptGenerator implements FormalConceptGenerat
 
 	@Override
 	public FormalContext generateConceptsFor(FormalContext formalContext) {
-		FormalConcept sup = FormalConcept.newSupremum(formalContext.objectCount() - 1);
-		formalContext.addFormalConcept(sup);
-		
+		Concept sup = Concept.newSupremum(formalContext.objectCount() - 1);
+		formalContext.addConcept(sup);
+
 		A.add(new ArrayList<>(sup.getExtent().getIndicies()));
 		B.add(new ArrayList<>());
 
 		inClose(formalContext, 0, 0);
 		for (int i = 0; i < A.size(); i++) {
-			if(!B.get(i).isEmpty()) {
-				formalContext.addFormalConcept(FormalConcept.create(i, new Extent(A.get(i)), new Intent(B.get(i))));
-			}	
+			if (!B.get(i).isEmpty()) {
+				Concept concept = Concept.create(i, new Extent(A.get(i)), new Intent(B.get(i)),
+						ConceptType.FORMAL_CONCEPT);
+				formalContext.addConcept(concept);
+			}
 		}
 		return formalContext;
 	}
@@ -68,21 +71,21 @@ public final class InCloseFormalConceptGenerator implements FormalConceptGenerat
 			B.add(rnew, new ArrayList<Integer>());
 			for (int i : A.get(r)) {
 				if (formalContext.hasRelation(i, j)) {
-					if(!A.get(rnew).contains(i)) {
+					if (!A.get(rnew).contains(i)) {
 						A.get(rnew).add(i);
-					}			
+					}
 				}
 			}
 			if (!A.get(rnew).isEmpty()) {
-				if (A.get(rnew).size() == A.get(r).size()) {	
-					if(!B.get(r).contains(j)) {
+				if (A.get(rnew).size() == A.get(r).size()) {
+					if (!B.get(r).contains(j)) {
 						B.get(r).add(j);
-					}			
-				} else if (isCanonical(formalContext, r, rnew, j -1)) {
-					if(!B.get(rnew).containsAll(B.get(r))) {
+					}
+				} else if (isCanonical(formalContext, r, rnew, j - 1)) {
+					if (!B.get(rnew).containsAll(B.get(r))) {
 						B.get(rnew).addAll(B.get(r));
 					}
-					if(!B.get(rnew).contains(j)) {
+					if (!B.get(rnew).contains(j)) {
 						B.get(rnew).add(j);
 					}
 

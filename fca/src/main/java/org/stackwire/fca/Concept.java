@@ -16,16 +16,13 @@
 package org.stackwire.fca;
 
 import java.util.Collection;
-import java.util.Set;
 
-import org.stackwire.fca.operators.AttributesCommonToObjectsFunction;
-import org.stackwire.fca.operators.ObjectsCommonToAttributesFunction;
 import org.stackwire.fca.utils.Utils;
 
 /**
  * Set of objects with the same attributes
  */
-public final class FormalConcept {
+public final class Concept {
 
 	/**
 	 * The set of things (objects) to which a concept applies
@@ -63,12 +60,12 @@ public final class FormalConcept {
 		}
 	}
 
-	public static FormalConcept create(int index, Extent extent) {
-		return new FormalConcept(index, extent);
+	public static Concept create(int index, Extent extent, ConceptType conceptType) {
+		return new Concept(index, extent, conceptType);
 	}
 
-	public static FormalConcept create(int index, Extent extent, Intent intent) {
-		return new FormalConcept(index, extent, intent);
+	public static Concept create(int index, Extent extent, Intent intent, ConceptType conceptType) {
+		return new Concept(index, extent, intent, conceptType);
 	}
 
 	/**
@@ -79,8 +76,8 @@ public final class FormalConcept {
 	 *            the count of objects in formal concept
 	 * @return supremum, which is the formal concept with null attributes
 	 */
-	public static FormalConcept newSupremum(int count) {
-		return FormalConcept.create(0, new Extent(Utils.range(0, count)));
+	public static Concept newSupremum(int count) {
+		return Concept.create(0, new Extent(Utils.range(0, count)), ConceptType.FORMAL_CONCEPT);
 	}
 
 	private int index;
@@ -88,23 +85,53 @@ public final class FormalConcept {
 	private Extent extent;
 
 	private Intent intent;
+	
+	private ConceptType conceptType;
 
-	private FormalConcept(int index) {
+	private Concept(int index) {
 		this.index = index;
 		this.extent = new Extent();
 		this.intent = new Intent();
 	}
 
-	private FormalConcept(int index, Extent extent) {
+	private Concept(int index, Extent extent, ConceptType conceptType) {
 		this.index = index;
 		this.extent = extent;
 		this.intent = new Intent();
+		this.conceptType = conceptType;
 	}
 
-	private FormalConcept(int index, Extent extent, Intent intent) {
+	private Concept(int index, Extent extent, Intent intent, ConceptType conceptType) {
 		this.index = index;
 		this.extent = extent;
 		this.intent = intent;
+		this.conceptType = conceptType;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Concept other = (Concept) obj;
+		if (extent == null) {
+			if (other.extent != null)
+				return false;
+		} else if (!extent.equals(other.extent))
+			return false;
+		if (intent == null) {
+			if (other.intent != null)
+				return false;
+		} else if (!intent.equals(other.intent))
+			return false;
+		return true;
+	}
+
+	public ConceptType getConceptType() {
+		return conceptType;
 	}
 
 	public Extent getExtent() {
@@ -120,35 +147,6 @@ public final class FormalConcept {
 	}
 
 	@Override
-	public String toString() {
-		return "\r\nFormalConcept [index=" + index + ", extent=" + extent + ", intent=" + intent + "]";
-	}
-
-	/**
-	 * Returns true if formal concept is valid, otherwise false. 
-	 * 
-	 * Requires the following to be true: A''= B' = A
-	 * 
-	 * @param formalContext formal context associated with this formal concept
-	 * @return true if formal concept is valid, otherwise false
-	 */
-	public boolean validate(FormalContext formalContext) {
-		if(formalContext == null) {
-			throw new IllegalArgumentException("formalContext is null");
-		}
-		AttributesCommonToObjectsFunction attributesFunction = new AttributesCommonToObjectsFunction(
-				formalContext.getRelations());
-		ObjectsCommonToAttributesFunction objectsFunction = new ObjectsCommonToAttributesFunction(
-				formalContext.getRelations());
-		Set<Integer> result = attributesFunction.andThen(objectsFunction).apply(this.getExtent().getIndicies());
-		
-		if (result.size() != getExtent().getCount()) {
-			return false;
-		}
-		return result.containsAll(getExtent().getIndicies()) && getExtent().getIndicies().containsAll(result);
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -158,27 +156,9 @@ public final class FormalConcept {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FormalConcept other = (FormalConcept) obj;
-		if (extent == null) {
-			if (other.extent != null)
-				return false;
-		} else if (!extent.equals(other.extent))
-			return false;
-		if (intent == null) {
-			if (other.intent != null)
-				return false;
-		} else if (!intent.equals(other.intent))
-			return false;
-		return true;
+	public String toString() {
+		return "\r\nFormalConcept [index=" + index + ", extent=" + extent + ", intent=" + intent + "]";
 	}
 	
 	
-
 }

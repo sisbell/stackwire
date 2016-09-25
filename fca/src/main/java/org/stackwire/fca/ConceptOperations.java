@@ -22,8 +22,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.stackwire.fca.FormalConcept.Extent;
-import org.stackwire.fca.FormalConcept.Intent;
+import org.stackwire.fca.Concept.Extent;
+import org.stackwire.fca.Concept.Intent;
 
 import com.google.common.collect.Sets;
 
@@ -32,6 +32,8 @@ import com.google.common.collect.Sets;
  */
 public final class ConceptOperations {
 
+
+	
 	private static Set<Integer> intersect(Set<Set<Integer>> set) {
 		Iterator<Set<Integer>> it = set.iterator();
 		Set<Integer> result = it.next();
@@ -50,17 +52,21 @@ public final class ConceptOperations {
 		return items;
 	}
 
-	private Optional<FormalConcept> createFormalConceptFrom(Collection<Extent> extents,
+	private Optional<Concept> createFormalConceptFrom(Collection<Extent> extents,
 			Collection<Intent> intents) {
 			Optional<Extent> extent = intersection(extents.toArray(new Extent[extents.size()]));
 			if(extent.isPresent()) {
 				Optional<Intent> intent = intersection(intents.toArray(new Intent[intents.size()]));
 				if(intent.isPresent()) {
-					return Optional.of(FormalConcept.create(0, extent.get(), intent.get()));
+					return Optional.of(Concept.create(0, extent.get(), intent.get(), ConceptType.FORMAL_CONCEPT));
 				}
 			}
 			
 			return Optional.empty();
+	}
+
+	public Optional<Concept> intersection(Concept... concepts) {
+		return Optional.empty();
 	}
 
 	/**
@@ -79,10 +85,6 @@ public final class ConceptOperations {
 			return Optional.empty();
 		}
 		return Optional.of(new Extent(intersectedSets));
-	}
-
-	public Optional<FormalConcept> intersection(FormalConcept... concepts) {
-		return Optional.empty();
 	}
 
 	public Optional<Intent> intersection(Intent... intents) {
