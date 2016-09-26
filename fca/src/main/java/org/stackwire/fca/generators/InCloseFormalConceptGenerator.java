@@ -23,6 +23,7 @@ import org.stackwire.fca.Concept.Intent;
 import org.stackwire.fca.ConceptType;
 import org.stackwire.fca.FormalConceptGenerator;
 import org.stackwire.fca.FormalContext;
+import org.stackwire.fca.IndexTag;
 
 /**
  * Formal concept generator implemented with the in-close algorithm
@@ -45,8 +46,8 @@ public final class InCloseFormalConceptGenerator implements FormalConceptGenerat
 		inClose(formalContext, 0, 0);
 		for (int i = 0; i < A.size(); i++) {
 			if (!B.get(i).isEmpty()) {
-				Concept concept = Concept.create(i, new Extent(A.get(i)), new Intent(B.get(i)),
-						ConceptType.FORMAL_CONCEPT);
+				Concept concept = Concept.create(new Extent(A.get(i)), new Intent(B.get(i)),
+						ConceptType.FORMAL_CONCEPT, new IndexTag(i));
 				formalContext.addConcept(concept);
 			}
 		}

@@ -60,12 +60,12 @@ public final class Concept {
 		}
 	}
 
-	public static Concept create(int index, Extent extent, ConceptType conceptType) {
-		return new Concept(index, extent, conceptType);
+	public static Concept create(Extent extent, Intent intent, ConceptType conceptType) {
+		return new Concept(extent, intent, conceptType, null);
 	}
 
-	public static Concept create(int index, Extent extent, Intent intent, ConceptType conceptType) {
-		return new Concept(index, extent, intent, conceptType);
+	public static Concept create(Extent extent, Intent intent, ConceptType conceptType, ConceptTag conceptTag) {
+		return new Concept(extent, intent, conceptType, conceptTag);
 	}
 
 	/**
@@ -77,32 +77,27 @@ public final class Concept {
 	 * @return supremum, which is the formal concept with null attributes
 	 */
 	public static Concept newSupremum(int count) {
-		return Concept.create(0, new Extent(Utils.range(0, count)), ConceptType.FORMAL_CONCEPT);
+		return Concept.create(new Extent(Utils.range(0, count)), new Intent(), ConceptType.FORMAL_CONCEPT,
+				new IndexTag(0));
 	}
-
-	private int index;
 
 	private Extent extent;
 
 	private Intent intent;
-	
+
 	private ConceptType conceptType;
 
-	private Concept(int index) {
-		this.index = index;
-		this.extent = new Extent();
-		this.intent = new Intent();
-	}
+	private ConceptTag conceptTag;
 
-	private Concept(int index, Extent extent, ConceptType conceptType) {
-		this.index = index;
+	private Concept(Extent extent, ConceptType conceptType, ConceptTag conceptTag) {
+		this.conceptTag = conceptTag;
 		this.extent = extent;
 		this.intent = new Intent();
 		this.conceptType = conceptType;
 	}
 
-	private Concept(int index, Extent extent, Intent intent, ConceptType conceptType) {
-		this.index = index;
+	private Concept(Extent extent, Intent intent, ConceptType conceptType, ConceptTag conceptTag) {
+		this.conceptTag = conceptTag;
 		this.extent = extent;
 		this.intent = intent;
 		this.conceptType = conceptType;
@@ -130,16 +125,16 @@ public final class Concept {
 		return true;
 	}
 
+	public ConceptTag getConceptTag() {
+		return conceptTag;
+	}
+
 	public ConceptType getConceptType() {
 		return conceptType;
 	}
 
 	public Extent getExtent() {
 		return extent;
-	}
-
-	public int getIndex() {
-		return index;
 	}
 
 	public Intent getIntent() {
@@ -155,10 +150,13 @@ public final class Concept {
 		return result;
 	}
 
+	public void setConceptType(ConceptType conceptType) {
+		this.conceptType = conceptType;
+	}
+
 	@Override
 	public String toString() {
-		return "\r\nFormalConcept [index=" + index + ", extent=" + extent + ", intent=" + intent + "]";
+		return "\r\nFormalConcept [extent=" + extent + ", intent=" + intent + "," + conceptTag + "]";
 	}
-	
-	
+
 }

@@ -58,7 +58,7 @@ public final class ConceptOperations {
 			if(extent.isPresent()) {
 				Optional<Intent> intent = intersection(intents.toArray(new Intent[intents.size()]));
 				if(intent.isPresent()) {
-					return Optional.of(Concept.create(0, extent.get(), intent.get(), ConceptType.FORMAL_CONCEPT));
+					return Optional.of(Concept.create(extent.get(), intent.get(), ConceptType.FORMAL_CONCEPT, new IndexTag(0)));
 				}
 			}
 			

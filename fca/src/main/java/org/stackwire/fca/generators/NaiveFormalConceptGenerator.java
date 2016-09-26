@@ -45,7 +45,7 @@ public class NaiveFormalConceptGenerator implements FormalConceptGenerator {
 			Extent extent = new Extent(objects);
 			Intent intent = new Intent(commonAttributes.apply(objects));
 			ConceptType conceptType = FormalContext.getConceptType(formalContext, extent, intent);
-			formalContext.addConcept(Concept.create(0, extent, intent, conceptType));
+			formalContext.addConcept(Concept.create(extent, intent, conceptType, null));
 		}
 		return formalContext;
 	}
