@@ -24,10 +24,10 @@ import java.util.List;
 
 import org.junit.Test;
 import org.stackwire.fca.Concept;
-import org.stackwire.fca.ConceptType;
-import org.stackwire.fca.FormalContext;
 import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
+import org.stackwire.fca.ConceptType;
+import org.stackwire.fca.FormalContext;
 
 public class NaiveConceptGeneratorTest {
 
@@ -39,7 +39,7 @@ public class NaiveConceptGeneratorTest {
 		FormalContext fc = FormalContext.create(relations);
 		NaiveFormalConceptGenerator generator = new NaiveFormalConceptGenerator();
 		generator.generateConceptsFor(fc);
-		Collection<Concept> result = fc.getFormalConcepts();
+		Collection<Concept> result = fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
 
 		assertEquals(4, result.size());
 

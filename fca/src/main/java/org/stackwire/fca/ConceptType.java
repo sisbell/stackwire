@@ -15,7 +15,60 @@
  */
 package org.stackwire.fca;
 
+import java.util.Set;
+
+import org.stackwire.fca.Concept.Extent;
+import org.stackwire.fca.Concept.Intent;
+import org.stackwire.fca.functions.AttributesCommonToObjectsFunction;
+import org.stackwire.fca.functions.ObjectsCommonToAttributesFunction;
+
+/**
+ * An enumeration of the types of concepts
+ */
 public enum ConceptType {
 
-	UNKNOWN, FORMAL_CONCEPT, PRECONCEPT, SEMICONCEPT
+	UNKNOWN, FORMAL_CONCEPT, PRECONCEPT, SEMICONCEPT;
+	
+	/**
+	 * Returns concept type
+	 * 
+	 * FORMAL_CONCEPT: Requires the following to be true: A''= B' = A
+	 * 
+	 * SEMICONCEPT:
+	 * 
+	 * PRECONCEPT: if each element of A
+	 * 
+	 * @param formalContext
+	 *            formal context associated with this formal concept
+	 * @return concept type
+	 * 
+	 */
+	public static ConceptType getConceptType(FormalContext formalContext, Extent extent, Intent intent) {
+		if (formalContext == null) {
+			throw new IllegalArgumentException("formalContext is null");
+		}
+		AttributesCommonToObjectsFunction attributesFunction = new AttributesCommonToObjectsFunction(
+				formalContext.getRelations());
+		ObjectsCommonToAttributesFunction objectsFunction = new ObjectsCommonToAttributesFunction(
+				formalContext.getRelations());
+
+		Set<Integer> aOpr = attributesFunction.apply(extent.getIndicies());
+		Set<Integer> bOpr = objectsFunction.apply(intent.getIndicies());
+
+		boolean BContainsAOpr = intent.getIndicies().containsAll(aOpr);
+		boolean AContainsBOpr = extent.getIndicies().containsAll(bOpr);
+
+		boolean x = aOpr.containsAll(intent.getIndicies()) && BContainsAOpr;
+		boolean y = bOpr.containsAll(extent.getIndicies()) && AContainsBOpr;
+
+		if (x && y) {
+			return ConceptType.FORMAL_CONCEPT;
+		} else if (x || y) {
+			return ConceptType.SEMICONCEPT;
+		} else if (BContainsAOpr && AContainsBOpr) {
+			return ConceptType.PRECONCEPT;
+		}
+
+		return ConceptType.UNKNOWN;
+	}
 }

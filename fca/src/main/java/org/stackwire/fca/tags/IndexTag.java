@@ -13,18 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.stackwire.fca;
+package org.stackwire.fca.tags;
+
+import org.stackwire.fca.ConceptTag;
 
 /**
- * Service generates concepts and adds them to the context
+ * Concept tag used to add an index to a concept
  */
-public interface FormalConceptGenerator {
+public class IndexTag implements ConceptTag {
+
+	private int index;
+
+	public IndexTag(int index) {
+		this.index = index;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	@Override
+	public String toString() {
+		return "IndexTag [index=" + index + "]";
+	}
 	
-	/**
-	 * Generates concepts for specified formal context and returns the same context with the concepts added
-	 * 
-	 * @param formalContext formal context 
-	 * @return specified formal context
-	 */
-	FormalContext generateConceptsFor(FormalContext formalContext);
 }

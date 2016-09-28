@@ -27,6 +27,9 @@ import java.util.Set;
  */
 public final class Clarifier {
 
+	/**
+	 * Result of a clarify operation
+	 */
 	public static class ClarifierResult {
 
 		private final Set<Integer> duplicateRows;
@@ -59,7 +62,7 @@ public final class Clarifier {
 	 * Removes duplicate rows and duplicate columns from the specified cross table and returns results
 	 * 
 	 * @param crossTable source cross table to analyze
-	 * @return results
+	 * @return results clarifier result
 	 */
 	public static ClarifierResult clarify(int crossTable[][]) {
 		Set<Integer> duplicateRows = new HashSet<>();

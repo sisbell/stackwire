@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.stackwire.fca;
+package org.stackwire.fca.utils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -23,6 +24,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * An ordered set of integers
+ */
 public class SemanticIndexSet {
 
 	protected final Set<Integer> indicies = new HashSet<>();
@@ -31,16 +35,20 @@ public class SemanticIndexSet {
 	}
 
 	public SemanticIndexSet(Collection<Integer> indicies) {
-		this.indicies.addAll(indicies);
+		if(indicies != null) {
+			this.indicies.addAll(indicies);
+		}	
 	}
 
-	public SemanticIndexSet(int index) {
-		indicies.add(index);
-	}
-
-	public SemanticIndexSet addIndex(Integer object) {
-		if (!indicies.contains(object)) {
-			indicies.add(object);
+	/**
+	 * Add index to set
+	 * 
+	 * @param index index to add
+	 * @return current instance of SemanticIndexSet
+	 */
+	public final SemanticIndexSet addIndex(Integer index) {
+		if (!indicies.contains(index)) {
+			indicies.add(index);
 		}
 		return this;
 	}
@@ -62,8 +70,16 @@ public class SemanticIndexSet {
 		return true;
 	}
 
-	public Set<Integer> filter(Predicate<Integer> p) {
-		return indicies.stream().filter(p).collect(Collectors.toSet());
+	/**
+	 * Return unmodifiable set of indicies that matches the specified predicate.
+	 * 
+	 * @param predicate
+	 *            predicate
+	 * 
+	 * @return unmodifiable set of indicies that matches the specified predicate
+	 */
+	public final Set<Integer> filter(Predicate<Integer> predicate) {
+		return Collections.unmodifiableSet(indicies.stream().filter(predicate).collect(Collectors.toSet()));
 	}
 
 	/**
@@ -71,16 +87,16 @@ public class SemanticIndexSet {
 	 * 
 	 * @return
 	 */
-	public Optional<Integer> first() {
+	public final Optional<Integer> first() {
 		return indicies.stream().findFirst();
 	}
 
-	public int getCount() {
+	public final int getCount() {
 		return indicies.size();
 	}
 
-	public Set<Integer> getIndicies() {
-		return indicies;
+	public final Set<Integer> getIndicies() {
+		return Collections.unmodifiableSet(indicies);
 	}
 
 	@Override
@@ -90,27 +106,42 @@ public class SemanticIndexSet {
 		result = prime * result + ((indicies == null) ? 0 : indicies.hashCode());
 		return result;
 	}
-	
-	public boolean hasIndex(int i) {
-		return indicies.contains(i);
+
+	/**
+	 * Return true if underlying set contains the specified index, otherwise
+	 * returns false
+	 * 
+	 * @param index
+	 *            the index to check
+	 * 
+	 * @return true if underlying set contains the specified index, otherwise
+	 *         returns false
+	 */
+	public final boolean hasIndex(int index) {
+		return indicies.contains(index);
 	}
-	
-	public boolean isEmpty() {
+
+	/**
+	 * Returns true if set is empty, otherwise false
+	 * 
+	 * @return true if set is empty, otherwise false
+	 */
+	public final boolean isEmpty() {
 		return !indicies.isEmpty();
 	}
 
 	/**
 	 * Only keep first element of indicies
 	 */
-	public void keepFirst() {
+	public final void keepFirst() {
 		Optional<Integer> first = first();
-		if(first.isPresent()) {
+		if (first.isPresent()) {
 			indicies.clear();
 			indicies.add(first.get());
-		}	
+		}
 	}
 
-	public Stream<Integer> stream() {
+	public final Stream<Integer> stream() {
 		return indicies.stream();
 	}
 

@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Set;
 
 import org.junit.Test;
+import org.stackwire.fca.functions.ObjectsCommonToAttributesFunction;
 
 public class ObjectCommonToAttributesFunctionTest {
 

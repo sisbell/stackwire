@@ -25,7 +25,7 @@ import org.stackwire.fca.Concept.Intent;
 import org.stackwire.fca.ConceptType;
 import org.stackwire.fca.FormalConceptGenerator;
 import org.stackwire.fca.FormalContext;
-import org.stackwire.fca.operators.AttributesCommonToObjectsFunction;
+import org.stackwire.fca.functions.AttributesCommonToObjectsFunction;
 
 /**
  * Naive implementation as defined in Concept Data Analysis (pg 30)
@@ -44,7 +44,7 @@ public class NaiveFormalConceptGenerator implements FormalConceptGenerator {
 		for (Set<Integer> objects : powerSet) {
 			Extent extent = new Extent(objects);
 			Intent intent = new Intent(commonAttributes.apply(objects));
-			ConceptType conceptType = FormalContext.getConceptType(formalContext, extent, intent);
+			ConceptType conceptType = ConceptType.getConceptType(formalContext, extent, intent);
 			formalContext.addConcept(Concept.create(extent, intent, conceptType, null));
 		}
 		return formalContext;

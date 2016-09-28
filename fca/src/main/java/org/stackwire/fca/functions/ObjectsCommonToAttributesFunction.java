@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.stackwire.fca.operators;
+package org.stackwire.fca.functions;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,35 +23,35 @@ import java.util.function.Function;
 import org.stackwire.fca.utils.Utils;
 
 /**
- * This is operator B'
+ * This is operator A'
  */
-public class AttributesCommonToObjectsFunction implements Function<Collection<Integer>, Set<Integer>> {
+public class ObjectsCommonToAttributesFunction implements Function<Collection<Integer>, Set<Integer>> {
 
 	private final int[][] relations;
 
-	public AttributesCommonToObjectsFunction(int[][] relations) {
+	public ObjectsCommonToAttributesFunction(int[][] relations) {
 		this.relations = relations;
 	}
 
-	public Set<Integer> apply(Collection<Integer> indicies) { // objects
+	public Set<Integer> apply(Collection<Integer> indicies) { // attributes
 		if(indicies == null || indicies.isEmpty()) {
-			return Utils.rangeSet(0, relations[0].length - 1);
+			return Utils.rangeSet(0, relations.length - 1);
 		}
-		Set<Integer> attributes = new HashSet<>();
-		int cols = relations[0].length;
-		for (int j = 0; j < cols; j++) {
-			boolean add = true;	
-			for (int i : indicies) {// rows				
+		Set<Integer> objects = new HashSet<>();
+		int rows = relations.length;
+		for (int i = 0; i < rows; i++) {
+			boolean add = true;
+			for (int j : indicies) {// cols
 				if (relations[i][j] == 0) {
 					add = false;
 					break;
 				}
 			}
-			if(add) {
-				attributes.add(j);
+			if (add) {
+				objects.add(i);
 			}
-		}
-		return attributes;
-	}
 
+		}
+		return objects;
+	}
 }

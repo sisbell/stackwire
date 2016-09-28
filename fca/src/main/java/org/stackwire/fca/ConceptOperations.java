@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
+import org.stackwire.fca.tags.IndexTag;
+import org.stackwire.fca.utils.SemanticIndexSet;
 
 import com.google.common.collect.Sets;
 
@@ -32,8 +34,6 @@ import com.google.common.collect.Sets;
  */
 public final class ConceptOperations {
 
-
-	
 	private static Set<Integer> intersect(Set<Set<Integer>> set) {
 		Iterator<Set<Integer>> it = set.iterator();
 		Set<Integer> result = it.next();

@@ -15,7 +15,8 @@
  */
 package org.stackwire.fca.generators;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,7 +28,7 @@ import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
 import org.stackwire.fca.ConceptType;
 import org.stackwire.fca.FormalContext;
-import org.stackwire.fca.IndexTag;
+import org.stackwire.fca.tags.IndexTag;
 
 public class InCloseConceptGeneratorTest {
 
@@ -39,7 +40,7 @@ public class InCloseConceptGeneratorTest {
 		FormalContext fc = FormalContext.create(relations);
 		InCloseFormalConceptGenerator generator = new InCloseFormalConceptGenerator();
 		generator.generateConceptsFor(fc);
-		Collection<Concept> result = fc.getFormalConcepts();
+		Collection<Concept> result = fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
 		assertEquals(4, result.size());
 
 		Concept fc0 = Concept.create(new Extent(Arrays.asList(1, 3)), new Intent(Arrays.asList(0, 1, 2, 3)),

@@ -18,6 +18,8 @@ package org.stackwire.fca;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.stackwire.fca.io.InputParser;
+
 public final class FCA {
 	
 	private final FormalConceptGenerator generator;
@@ -30,7 +32,7 @@ public final class FCA {
 	}
 	
 	public FormalContext generateFrom(InputStream input) throws IOException {
-		FormalContext ctx = inputParser.parse(input);
-		return generator.generateConceptsFor(ctx);
+		return inputParser.parse(input, generator);
+	//	return generator.generateConceptsFor(ctx);
 	}
 }

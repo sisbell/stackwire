@@ -13,13 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.stackwire.fca;
+package org.stackwire.fca.io;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public interface InputParser {
+import org.stackwire.fca.FormalConceptGenerator;
+import org.stackwire.fca.FormalContext;
 
-	FormalContext parse(InputStream inputStream) throws IOException;
-	
+public class ProtobufInputParser implements InputParser {
+
+	@Override
+	public FormalContext parse(InputStream inputStream, FormalConceptGenerator generator) throws IOException {
+		return null;
+	}
 }

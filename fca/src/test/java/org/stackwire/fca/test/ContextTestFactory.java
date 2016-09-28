@@ -36,6 +36,6 @@ public class ContextTestFactory {
 				Arrays.asList("breathes in water (a)", "can fly (b)", "has beak (c)", "has hands (d)",
 						"has skeleton (e)", "has wings (f)", "lives in water (g)", "is viviparous (h)",
 						"produces light (i)"),
-				relations);
+				relations, null);
 	}
 }

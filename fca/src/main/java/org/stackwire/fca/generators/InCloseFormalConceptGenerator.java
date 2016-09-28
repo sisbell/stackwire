@@ -23,7 +23,7 @@ import org.stackwire.fca.Concept.Intent;
 import org.stackwire.fca.ConceptType;
 import org.stackwire.fca.FormalConceptGenerator;
 import org.stackwire.fca.FormalContext;
-import org.stackwire.fca.IndexTag;
+import org.stackwire.fca.tags.IndexTag;
 
 /**
  * Formal concept generator implemented with the in-close algorithm

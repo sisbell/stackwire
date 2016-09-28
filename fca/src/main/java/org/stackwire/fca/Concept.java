@@ -17,6 +17,8 @@ package org.stackwire.fca;
 
 import java.util.Collection;
 
+import org.stackwire.fca.tags.IndexTag;
+import org.stackwire.fca.utils.SemanticIndexSet;
 import org.stackwire.fca.utils.Utils;
 
 /**
@@ -37,9 +39,6 @@ public final class Concept {
 			super(indicies);
 		}
 
-		public Extent(int index) {
-			super(index);
-		}
 	}
 
 	/**
@@ -55,15 +54,30 @@ public final class Concept {
 			super(indicies);
 		}
 
-		public Intent(int index) {
-			super(index);
-		}
 	}
 
+	/**
+	 * Create concept
+	 * 
+	 * @param extent extent of the concept
+	 * @param intent intent of concept
+	 * @param conceptType concept type. May be null.
+	 * @return concept
+	 */
 	public static Concept create(Extent extent, Intent intent, ConceptType conceptType) {
 		return new Concept(extent, intent, conceptType, null);
 	}
 
+	/**
+	 * Create concept
+	 * 
+	 * @param extent extent of the concept
+	 * @param intent intent of concept
+	 * @param conceptType concept type. May be null.
+	 * @param conceptTag concept tag for additional meta-information
+	 * 
+	 * @return concept
+	 */
 	public static Concept create(Extent extent, Intent intent, ConceptType conceptType, ConceptTag conceptTag) {
 		return new Concept(extent, intent, conceptType, conceptTag);
 	}
