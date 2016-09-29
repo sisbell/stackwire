@@ -22,11 +22,11 @@ import org.stackwire.fca.Concept;
 import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
 import org.stackwire.fca.ConceptGenerator;
-import org.stackwire.fca.ConceptOperations;
 import org.stackwire.fca.ConceptType;
 import org.stackwire.fca.Context;
 import org.stackwire.fca.functions.AttributesCommonToObjectsFunction;
 import org.stackwire.fca.functions.ObjectsCommonToAttributesFunction;
+import org.stackwire.fca.utils.Intents;
 
 public class ObjectIntersectionConceptGenerator implements ConceptGenerator {
 
@@ -50,7 +50,7 @@ public class ObjectIntersectionConceptGenerator implements ConceptGenerator {
 		for (int g = 0; g < formalContext.objectCount(); g++) {
 			for (Concept concept : formalContext.getConceptsOf(ConceptType.FORMAL_CONCEPT).get()) {
 				Intent mOpr = new Intent(attributesFunction.apply(Arrays.asList(g)));
-				Optional<Intent> intersectIntent = ConceptOperations.intersectIntents(mOpr, concept.getIntent());
+				Optional<Intent> intersectIntent = Intents.intersect(mOpr, concept.getIntent());
 				if (intersectIntent.isPresent()) {
 					Intent intent = intersectIntent.get();
 					if (!formalContext.hasConceptOf(intent, ConceptType.FORMAL_CONCEPT)) {
