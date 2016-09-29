@@ -21,14 +21,14 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-public class FormalContextTest {
+public class ContextTest {
 
 	@Test
 	public void clarifyNames() throws Exception {
 		int[][] relations = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
 
-		FormalContext fc = FormalContext.create(relations);
-		FormalContext clarifiedContext = fc.clarify();
+		Context fc = Context.create(relations);
+		Context clarifiedContext = fc.clarify();
 		
 		assertTrue( clarifiedContext.getObjectNames().containsAll(Arrays.asList("x1", "x2", "x3", "x5")));
 		assertTrue( clarifiedContext.getAttributeNames().containsAll(Arrays.asList("y1", "y2", "y3")));
@@ -42,8 +42,8 @@ public class FormalContextTest {
 		int[][] clarifiedRelations = { { 1, 1, 1 }, { 1, 0, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
 		int[][] relations = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
 
-		FormalContext fc = FormalContext.create(relations);
-		FormalContext clarifiedContext = fc.clarify();
+		Context fc = Context.create(relations);
+		Context clarifiedContext = fc.clarify();
 		assertTrue(Arrays.deepEquals(clarifiedRelations, clarifiedContext.getRelations()));
 		
 	}

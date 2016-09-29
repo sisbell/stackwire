@@ -32,9 +32,9 @@
 package org.stackwire.jmh;
 
 import org.openjdk.jmh.annotations.Benchmark;
-import org.stackwire.fca.FormalContext;
-import org.stackwire.fca.generators.InCloseFormalConceptGenerator;
-import org.stackwire.fca.generators.NaiveFormalConceptGenerator;
+import org.stackwire.fca.Context;
+import org.stackwire.fca.generators.InCloseConceptGenerator;
+import org.stackwire.fca.generators.NaiveConceptGenerator;
 
 public class ConceptGeneratorBenchmark {
 
@@ -43,16 +43,16 @@ public class ConceptGeneratorBenchmark {
 	
     @Benchmark
     public void inclose() {
-		FormalContext fc = FormalContext.create(relations);
-		InCloseFormalConceptGenerator generator = new InCloseFormalConceptGenerator();
+		Context fc = Context.create(relations);
+		InCloseConceptGenerator generator = new InCloseConceptGenerator();
 		generator.generateConceptsFor(fc);
 		//fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
     }
     
     @Benchmark
     public void naive() {
-		FormalContext fc = FormalContext.create(relations);
-		NaiveFormalConceptGenerator generator = new NaiveFormalConceptGenerator();
+		Context fc = Context.create(relations);
+		NaiveConceptGenerator generator = new NaiveConceptGenerator();
 		generator.generateConceptsFor(fc);
 		//fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
     }

@@ -22,9 +22,9 @@ import java.util.function.Function;
 import org.stackwire.fca.Concept;
 import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
+import org.stackwire.fca.ConceptGenerator;
 import org.stackwire.fca.ConceptType;
-import org.stackwire.fca.FormalConceptGenerator;
-import org.stackwire.fca.FormalContext;
+import org.stackwire.fca.Context;
 import org.stackwire.fca.functions.AttributesCommonToObjectsFunction;
 
 /**
@@ -34,10 +34,10 @@ import org.stackwire.fca.functions.AttributesCommonToObjectsFunction;
  * intent. For each element x of P(G), if A''= B' = A, add as a formal concept
  * 
  */
-public class NaiveFormalConceptGenerator implements FormalConceptGenerator {
+public class NaiveConceptGenerator implements ConceptGenerator {
 
 	@Override
-	public FormalContext generateConceptsFor(FormalContext formalContext) {
+	public Context generateConceptsFor(Context formalContext) {
 		Set<Set<Integer>> powerSet = formalContext.powerSetOfObjects();
 		Function<Collection<Integer>, Set<Integer>> commonAttributes = new AttributesCommonToObjectsFunction(
 				formalContext.getRelations());

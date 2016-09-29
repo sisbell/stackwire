@@ -17,7 +17,7 @@ package org.stackwire.fca.test;
 
 import java.util.Arrays;
 
-import org.stackwire.fca.FormalContext;
+import org.stackwire.fca.Context;
 
 public class ContextTestFactory {
 
@@ -26,11 +26,11 @@ public class ContextTestFactory {
 	 * 
 	 * @return
 	 */
-	public static FormalContext vertebateAnimals() {
+	public static Context vertebateAnimals() {
 		int[][] relations = { { 0, 1, 0, 0, 1, 1, 0, 1, 0 }, { 0, 1, 1, 0, 1, 1, 0, 0, 0 },
 				{ 0, 0, 0, 1, 1, 0, 0, 1, 0 }, { 1, 0, 1, 0, 1, 0, 1, 0, 0 }, { 0, 0, 1, 0, 1, 1, 1, 0, 0 },
 				{ 1, 0, 0, 0, 1, 0, 1, 0, 0 }, { 1, 0, 0, 0, 1, 0, 1, 0, 1 } };
-		return FormalContext.create(
+		return Context.create(
 				Arrays.asList("Bat (1)", "Eagle (2)", "Monkey (3)", "Parrot fish (4)", "Penguin (5)", "Shark (6)",
 						"Lantern fish (7)"),
 				Arrays.asList("breathes in water (a)", "can fly (b)", "has beak (c)", "has hands (d)",

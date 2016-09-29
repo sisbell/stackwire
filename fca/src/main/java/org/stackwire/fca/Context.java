@@ -21,18 +21,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.stackwire.fca.Clarifier.ClarifierResult;
+import org.stackwire.fca.Concept.Extent;
+import org.stackwire.fca.Concept.Intent;
 import org.stackwire.fca.utils.Utils;
 
 import com.google.common.collect.Sets;
 
 /**
- * Service for adding and retrieving concepts. Relations should all be added prior to generating concepts
+ * Service for adding and retrieving concepts. Relations should all be added
+ * prior to generating concepts
  * 
- * @see FormalConceptGenerator
+ * @see ConceptGenerator
  */
-public class FormalContext {
+public class Context {
 
 	/**
 	 * Create formal context with the specified number of objects and the
@@ -46,8 +50,8 @@ public class FormalContext {
 	 *            number of attributes in context
 	 * @return new formal context
 	 */
-	public static FormalContext create(int objectCount, int attributeCount) {
-		return new FormalContext(generateLabel(objectCount, "x"), generateLabel(attributeCount, "y"));
+	public static Context create(int objectCount, int attributeCount) {
+		return new Context(generateLabel(objectCount, "x"), generateLabel(attributeCount, "y"));
 	}
 
 	/**
@@ -57,8 +61,8 @@ public class FormalContext {
 	 * @param relations
 	 * @return formal context with specified relations
 	 */
-	public static FormalContext create(int[][] relations) {
-		return new FormalContext(generateLabel(relations.length, "x"), generateLabel(relations[0].length, "y"),
+	public static Context create(int[][] relations) {
+		return new Context(generateLabel(relations.length, "x"), generateLabel(relations[0].length, "y"),
 				relations, null);
 	}
 
@@ -73,8 +77,8 @@ public class FormalContext {
 	 *            attribute names
 	 * @return new formal context
 	 */
-	public static FormalContext create(List<String> objectNames, List<String> attributeNames) {
-		return new FormalContext(objectNames, attributeNames);
+	public static Context create(List<String> objectNames, List<String> attributeNames) {
+		return new Context(objectNames, attributeNames);
 	}
 
 	/**
@@ -92,9 +96,9 @@ public class FormalContext {
 	 * @param descriptionPaths
 	 * @return formal context
 	 */
-	public static FormalContext create(List<String> objectNames, List<String> attributeNames, int[][] relations,
+	public static Context create(List<String> objectNames, List<String> attributeNames, int[][] relations,
 			int[][] descriptionPaths) {
-		return new FormalContext(objectNames, attributeNames, relations, descriptionPaths);
+		return new Context(objectNames, attributeNames, relations, descriptionPaths);
 	}
 
 	/**
@@ -149,7 +153,7 @@ public class FormalContext {
 	 * @param attributeNames
 	 *            attribute names
 	 */
-	private FormalContext(List<String> objectNames, List<String> attributeNames) {
+	private Context(List<String> objectNames, List<String> attributeNames) {
 		this(objectNames, attributeNames, null, null);
 	}
 
@@ -161,7 +165,7 @@ public class FormalContext {
 	 * @param relations
 	 * @param paths
 	 */
-	private FormalContext(List<String> objectNames, List<String> attributeNames, int[][] relations, int[][] paths) {
+	private Context(List<String> objectNames, List<String> attributeNames, int[][] relations, int[][] paths) {
 		if (objectNames == null || objectNames.isEmpty()) {
 			throw new IllegalArgumentException("objectNames is empty");
 		}
@@ -194,7 +198,7 @@ public class FormalContext {
 	 */
 	public boolean addConcept(Concept concept) {
 		ConceptType type = concept.getConceptType();
-		Optional<Collection<Concept>> concepts = getConceptsOf(type);
+		Optional<Collection<Concept>> concepts = getConceptsOfLive(type);
 		if (concepts.isPresent()) {
 			return concepts.get().add(concept);
 		}
@@ -257,7 +261,7 @@ public class FormalContext {
 	 * 
 	 * @return a new formal context with the clarified relations
 	 */
-	public FormalContext clarify() {
+	public Context clarify() {
 		ClarifierResult result = Clarifier.clarify(relations);
 
 		List<String> newObjectNames = new ArrayList<String>(objectNames);
@@ -270,7 +274,7 @@ public class FormalContext {
 			newAttributeNames.remove(columnIndex);
 		}
 
-		return FormalContext.create(newObjectNames, newAttributeNames, result.getClarifiedCrossTable(),
+		return Context.create(newObjectNames, newAttributeNames, result.getClarifiedCrossTable(),
 				descriptionPaths);
 	}
 
@@ -284,12 +288,57 @@ public class FormalContext {
 	}
 
 	/**
+	 * Returns concepts that have the specified extent and concept type. Is
+	 * empty if no match.
+	 * 
+	 * @param extent
+	 *            the extent to match
+	 * @param conceptType
+	 * @return concepts that have the specified extent and concept type
+	 */
+	public Collection<Concept> getConceptOf(Extent extent, ConceptType conceptType) {
+		Optional<Collection<Concept>> concepts = getConceptsOf(conceptType);
+		if (concepts.isPresent()) {
+			return concepts.get().stream().filter(i -> extent.equals(i.getExtent())).collect(Collectors.toSet());
+		}
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Returns concepts that have the specified intent and concept type. Is
+	 * empty if no match.
+	 * 
+	 * @param intent
+	 *            the intent to match
+	 * @param conceptType
+	 * @return concepts that have the specified intent and concept type
+	 */
+	public Collection<Concept> getConceptOf(Intent intent, ConceptType conceptType) {
+		Optional<Collection<Concept>> concepts = getConceptsOf(conceptType);
+		if (concepts.isPresent()) {
+			return concepts.get().stream().filter(i -> intent.equals(i.getIntent())).collect(Collectors.toSet());
+		}
+		return Collections.emptyList();
+	}
+
+	/**
 	 * Get all concepts of the specified type. The collection may be empty. If
 	 * optional itself is empty, then the specified content type is unsupported.
 	 * 
 	 * @return all concepts of the specified type
 	 */
 	public Optional<Collection<Concept>> getConceptsOf(ConceptType type) {
+		if (ConceptType.FORMAL_CONCEPT.equals(type)) {
+			return Optional.of(Collections.unmodifiableCollection(new ArrayList<>(formalConcepts)));
+		} else if (ConceptType.PRECONCEPT.equals(type)) {
+			return Optional.of(Collections.unmodifiableCollection(new ArrayList<>(preConcepts)));
+		} else if (ConceptType.SEMICONCEPT.equals(type)) {
+			return Optional.of(Collections.unmodifiableCollection(new ArrayList<>(semiConcepts)));
+		}
+		return Optional.empty();
+	}
+
+	public Optional<Collection<Concept>> getConceptsOfLive(ConceptType type) {
 		if (ConceptType.FORMAL_CONCEPT.equals(type)) {
 			return Optional.of(formalConcepts);
 		} else if (ConceptType.PRECONCEPT.equals(type)) {
@@ -325,6 +374,30 @@ public class FormalContext {
 	 */
 	public int[][] getRelations() {
 		return relations;
+	}
+
+	public boolean hasConceptOf(Extent extent, ConceptType conceptType) {
+		Optional<Collection<Concept>> concepts = getConceptsOf(conceptType);
+		if (concepts.isPresent()) {
+			for (Concept concept : concepts.get()) {
+				if (concept.getExtent().equals(extent)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean hasConceptOf(Intent intent, ConceptType conceptType) {
+		Optional<Collection<Concept>> concepts = getConceptsOf(conceptType);
+		if (concepts.isPresent()) {
+			for (Concept concept : concepts.get()) {
+				if (concept.getIntent().equals(intent)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -389,8 +462,14 @@ public class FormalContext {
 		}
 	}
 
-	public FormalContext reduce() {
+	public Context reduce() {
 		return null;
 	}
+	
+	/*
+	public ConceptLattice findConceptLattice() {
+		return null;
+	}
+	*/
 
 }

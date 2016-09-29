@@ -13,18 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.stackwire.fca.io;
-
-import java.io.IOException;
-import java.io.InputStream;
+package org.stackwire.fca.generators;
 
 import org.stackwire.fca.ConceptGenerator;
-import org.stackwire.fca.Context;
 
-public class ProtobufInputParser implements InputParser {
+public class ObjectIntersectionConceptGeneratorTest extends BaseConceptGeneratorTest {
 
 	@Override
-	public Context parse(InputStream inputStream, ConceptGenerator generator) throws IOException {
-		return null;
+	protected ConceptGenerator getGenerator() {
+		return new ObjectIntersectionConceptGenerator();
 	}
 }

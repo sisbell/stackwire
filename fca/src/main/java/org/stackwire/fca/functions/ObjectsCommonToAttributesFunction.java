@@ -33,6 +33,7 @@ public class ObjectsCommonToAttributesFunction implements Function<Collection<In
 		this.relations = relations;
 	}
 
+	@Override
 	public Set<Integer> apply(Collection<Integer> indicies) { // attributes
 		if(indicies == null || indicies.isEmpty()) {
 			return Utils.rangeSet(0, relations.length - 1);

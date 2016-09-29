@@ -18,8 +18,8 @@ package org.stackwire.fca.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.stackwire.fca.FormalConceptGenerator;
-import org.stackwire.fca.FormalContext;
+import org.stackwire.fca.ConceptGenerator;
+import org.stackwire.fca.Context;
 
 /**
  * Service for creating a formal context from the specified input
@@ -35,6 +35,6 @@ public interface InputParser {
 	 * @param generator the concept generator to use for adding concepts
 	 * @throws IOException if I/O or validation exception with stream
 	 */
-	FormalContext parse(InputStream inputStream, FormalConceptGenerator generator) throws IOException;
+	Context parse(InputStream inputStream, ConceptGenerator generator) throws IOException;
 	
 }

@@ -18,13 +18,13 @@ package org.stackwire.fca.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.stackwire.fca.FormalConceptGenerator;
-import org.stackwire.fca.FormalContext;
+import org.stackwire.fca.ConceptGenerator;
+import org.stackwire.fca.Context;
 
 public class CxtInputParser implements InputParser {
 
 	@Override
-	public FormalContext parse(InputStream inputStream, FormalConceptGenerator generator) throws IOException {
+	public Context parse(InputStream inputStream, ConceptGenerator generator) throws IOException {
 		return null;
 	}
 

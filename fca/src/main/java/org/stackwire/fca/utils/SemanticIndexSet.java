@@ -35,15 +35,16 @@ public class SemanticIndexSet {
 	}
 
 	public SemanticIndexSet(Collection<Integer> indicies) {
-		if(indicies != null) {
+		if (indicies != null) {
 			this.indicies.addAll(indicies);
-		}	
+		}
 	}
 
 	/**
 	 * Add index to set
 	 * 
-	 * @param index index to add
+	 * @param index
+	 *            index to add
 	 * @return current instance of SemanticIndexSet
 	 */
 	public final SemanticIndexSet addIndex(Integer index) {
@@ -65,7 +66,7 @@ public class SemanticIndexSet {
 		if (indicies == null) {
 			if (other.getIndicies() != null)
 				return false;
-		} else if (!indicies.containsAll(other.getIndicies()))
+		} else if (!indicies.containsAll(other.getIndicies()) || !other.getIndicies().containsAll(indicies))
 			return false;
 		return true;
 	}

@@ -16,6 +16,8 @@
 package org.stackwire.fca;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
 
 import org.stackwire.fca.tags.IndexTag;
 import org.stackwire.fca.utils.SemanticIndexSet;
@@ -31,10 +33,28 @@ public final class Concept {
 	 */
 	public static class Extent extends SemanticIndexSet {
 
+		/**
+		 * Returns intersection of all specified extents, or empty if no intersection
+		 * 
+		 * @param extents 
+		 * @return intersection of all specified extents, or empty if no intersection
+		 */
+		public static Optional<Extent> intersection(Extent... extents) {
+			Set<Set<Integer>> sets = Utils.toSets(extents);
+			if (sets == null || sets.isEmpty()) {
+				return Optional.empty();
+			}
+			Set<Integer> intersectedSets = Utils.intersect(sets);
+			if (intersectedSets.isEmpty()) {
+				return Optional.empty();
+			}
+			return Optional.of(new Extent(intersectedSets));
+		}
+
 		public Extent() {
 			super();
 		}
-
+		
 		public Extent(Collection<Integer> indicies) {
 			super(indicies);
 		}
@@ -82,6 +102,11 @@ public final class Concept {
 		return new Concept(extent, intent, conceptType, conceptTag);
 	}
 
+	public static Concept newInfimum(int count) {
+		return Concept.create(new Extent(), new Intent(Utils.range(0, count)), ConceptType.FORMAL_CONCEPT,
+				new IndexTag(0));
+	}
+	
 	/**
 	 * Returns supremum. This concept contains the set of objects that have the
 	 * null element as an attribute element. This is all objects.

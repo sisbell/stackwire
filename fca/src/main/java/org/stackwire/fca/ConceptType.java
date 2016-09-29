@@ -43,7 +43,7 @@ public enum ConceptType {
 	 * @return concept type
 	 * 
 	 */
-	public static ConceptType getConceptType(FormalContext formalContext, Extent extent, Intent intent) {
+	public static ConceptType getConceptType(Context formalContext, Extent extent, Intent intent) {
 		if (formalContext == null) {
 			throw new IllegalArgumentException("formalContext is null");
 		}

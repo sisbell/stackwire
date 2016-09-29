@@ -9,13 +9,6 @@ import org.stackwire.fca.patterns.PatternConcept;
 
 public class PatternStructure {
 
-	private Collection<PatternConcept> concepts = new ArrayList<>();
-	
-	/**
-	 * Objects to description cross table
-	 */
-	private int[][] relations;
-	
 	/**
 	 * 
 	 * @param objectNames
@@ -26,6 +19,13 @@ public class PatternStructure {
 	public static PatternStructure create(List<String> objectNames, List<Description> descriptions, int[][] relations) {
 		return null;
 	}
+	
+	private Collection<PatternConcept> concepts = new ArrayList<>();
+	
+	/**
+	 * Objects to description cross table
+	 */
+	private int[][] relations;
 	
 	
 

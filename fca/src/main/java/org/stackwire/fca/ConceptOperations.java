@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
-import org.stackwire.fca.tags.IndexTag;
 import org.stackwire.fca.utils.SemanticIndexSet;
 
 import com.google.common.collect.Sets;
@@ -43,39 +42,19 @@ public final class ConceptOperations {
 		return result;
 	}
 
-	private static Set<Set<Integer>> toSets(SemanticIndexSet... indexSet) {
-		Set<Set<Integer>> items = Arrays.stream(indexSet).map(SemanticIndexSet::getIndicies)
-				.collect(Collectors.toSet());
-		if (items.isEmpty()) {
-			return null;
-		}
-		return items;
-	}
-
-	private Optional<Concept> createFormalConceptFrom(Collection<Extent> extents,
-			Collection<Intent> intents) {
-			Optional<Extent> extent = intersection(extents.toArray(new Extent[extents.size()]));
-			if(extent.isPresent()) {
-				Optional<Intent> intent = intersection(intents.toArray(new Intent[intents.size()]));
-				if(intent.isPresent()) {
-					return Optional.of(Concept.create(extent.get(), intent.get(), ConceptType.FORMAL_CONCEPT, new IndexTag(0)));
-				}
-			}
-			
-			return Optional.empty();
-	}
-
-	public Optional<Concept> intersection(Concept... concepts) {
-		return Optional.empty();
+	public static Optional<Extent> intersectExtents(Collection<Extent> extents) {
+		return intersectExtents(extents.toArray(new Extent[extents.size()]));
 	}
 
 	/**
-	 * Returns intersection of all specified extents, or empty if no intersection
+	 * Returns intersection of all specified extents, or empty if no
+	 * intersection
 	 * 
-	 * @param extents 
-	 * @return intersection of all specified extents, or empty if no intersection
+	 * @param extents
+	 * @return intersection of all specified extents, or empty if no
+	 *         intersection
 	 */
-	public Optional<Extent> intersection(Extent... extents) {
+	public static Optional<Extent> intersectExtents(Extent... extents) {
 		Set<Set<Integer>> sets = toSets(extents);
 		if (sets == null || sets.isEmpty()) {
 			return Optional.empty();
@@ -87,7 +66,12 @@ public final class ConceptOperations {
 		return Optional.of(new Extent(intersectedSets));
 	}
 
-	public Optional<Intent> intersection(Intent... intents) {
+	public static Optional<Intent> intersectIntents(Collection<Intent> intents) {
+		return intersectIntents(intents.toArray(new Intent[intents.size()]));
+	}
+
+	public static Optional<Intent> intersectIntents(Intent... intents) {
+
 		Set<Set<Integer>> sets = toSets(intents);
 		if (sets == null || sets.isEmpty()) {
 			return Optional.empty();
@@ -97,6 +81,19 @@ public final class ConceptOperations {
 			return Optional.empty();
 		}
 		return Optional.of(new Intent(intersectedSets));
+	}
+
+	private static Set<Set<Integer>> toSets(SemanticIndexSet... indexSet) {
+		Set<Set<Integer>> items = Arrays.stream(indexSet).map(SemanticIndexSet::getIndicies)
+				.collect(Collectors.toSet());
+		if (items.isEmpty()) {
+			return null;
+		}
+		return items;
+	}
+
+	public Optional<Concept> intersection(Concept... concepts) {
+		return Optional.empty();
 	}
 
 }

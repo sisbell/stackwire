@@ -22,16 +22,16 @@ import org.stackwire.fca.io.InputParser;
 
 public final class FCA {
 	
-	private final FormalConceptGenerator generator;
+	private final ConceptGenerator generator;
 	
 	private final InputParser inputParser;
 
-	public FCA(FormalConceptGenerator generator, InputParser inputParser) {
+	public FCA(ConceptGenerator generator, InputParser inputParser) {
 		this.generator = generator;
 		this.inputParser = inputParser;
 	}
 	
-	public FormalContext generateFrom(InputStream input) throws IOException {
+	public Context generateFrom(InputStream input) throws IOException {
 		return inputParser.parse(input, generator);
 	//	return generator.generateConceptsFor(ctx);
 	}

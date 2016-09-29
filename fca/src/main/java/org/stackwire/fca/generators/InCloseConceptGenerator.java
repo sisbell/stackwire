@@ -20,23 +20,23 @@ import java.util.ArrayList;
 import org.stackwire.fca.Concept;
 import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
+import org.stackwire.fca.ConceptGenerator;
 import org.stackwire.fca.ConceptType;
-import org.stackwire.fca.FormalConceptGenerator;
-import org.stackwire.fca.FormalContext;
+import org.stackwire.fca.Context;
 import org.stackwire.fca.tags.IndexTag;
 
 /**
  * Formal concept generator implemented with the in-close algorithm
  * 
  */
-public final class InCloseFormalConceptGenerator implements FormalConceptGenerator {
+public final class InCloseConceptGenerator implements ConceptGenerator {
 
 	private ArrayList<ArrayList<Integer>> A = new ArrayList<>();
 
 	private ArrayList<ArrayList<Integer>> B = new ArrayList<>();
 
 	@Override
-	public FormalContext generateConceptsFor(FormalContext formalContext) {
+	public Context generateConceptsFor(Context formalContext) {
 		Concept sup = Concept.newSupremum(formalContext.objectCount() - 1);
 		formalContext.addConcept(sup);
 
@@ -64,7 +64,7 @@ public final class InCloseFormalConceptGenerator implements FormalConceptGenerat
 	 * @param attributeColumnOffset
 	 *            start position of the column in the boolean matrix
 	 */
-	protected void inClose(FormalContext formalContext, int r, int y) {
+	protected void inClose(Context formalContext, int r, int y) {
 		int rnew = r + 1;
 
 		for (int j = y; j <= formalContext.attributeCount() - 1; j++) {
@@ -96,7 +96,7 @@ public final class InCloseFormalConceptGenerator implements FormalConceptGenerat
 		}
 	}
 
-	protected boolean isCanonical(FormalContext formalContext, int r, int rnew, int y) {
+	protected boolean isCanonical(Context formalContext, int r, int rnew, int y) {
 		for (int k = B.get(r).size() - 1; k >= 0; k--) {
 			for (int j = y; j >= B.get(r).get(k) + 1; j--) {
 				int h = 0;

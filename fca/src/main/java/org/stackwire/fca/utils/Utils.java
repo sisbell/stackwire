@@ -18,12 +18,14 @@ package org.stackwire.fca.utils;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 public class Utils {
 
@@ -49,7 +51,7 @@ public class Utils {
 
 		return dupColumns;
 	}
-
+	
 	public static Set<Integer> duplicateRows(int[][] crossTable, int[] sourceRow, int rowOffset,
 			Set<Integer> skipRows) {
 		Set<Integer> dupRows = new HashSet<>();
@@ -62,6 +64,15 @@ public class Utils {
 			}
 		}
 		return dupRows;
+	}
+	
+	public static Set<Integer> intersect(Set<Set<Integer>> set) {
+		Iterator<Set<Integer>> it = set.iterator();
+		Set<Integer> result = it.next();
+		while (it.hasNext()) {
+			result = Sets.intersection(result, Sets.newHashSet(it.next()));
+		}
+		return result;
 	}
 
 	public static List<Integer> range(int start, int end) {
@@ -119,5 +130,14 @@ public class Utils {
 			newRow++;
 		}
 		return newCrossTable;
+	}
+
+	public static Set<Set<Integer>> toSets(SemanticIndexSet... indexSet) {
+		Set<Set<Integer>> items = Arrays.stream(indexSet).map(SemanticIndexSet::getIndicies)
+				.collect(Collectors.toSet());
+		if (items.isEmpty()) {
+			return null;
+		}
+		return items;
 	}
 }
