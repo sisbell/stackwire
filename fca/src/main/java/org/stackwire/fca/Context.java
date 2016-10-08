@@ -235,9 +235,9 @@ public class Context {
 	 * @param attributeIndex
 	 * @return true if each object has the specified attribute, otherwise false
 	 */
-	public boolean allObjectsHaveAttribute(Collection<Integer> objectIndicies, int attributeIndex) {
+	public boolean allObjectsHaveAttribute(Collection<Integer> objectIndicies, int attributeIndex, double threshold) {
 		for (Integer objectIndex : objectIndicies) {
-			if (!hasRelation(objectIndex, attributeIndex)) {
+			if (!hasRelation(objectIndex, attributeIndex, threshold)) {
 				return false;
 			}
 		}
@@ -400,18 +400,21 @@ public class Context {
 	}
 
 	/**
-	 * Returns true if object has attribute, otherwise false
+	 * Returns true if object has attribute, otherwise false. Object has
+	 * attribute if value is above specified threshold.
 	 * 
 	 * @param objectIndex
 	 *            index of object
 	 * @param attributeIndex
 	 *            index of attribute
+	 * @param threshold
+	 *            threshold
 	 * 
 	 * @return true if object has attribute, otherwise false
 	 */
-	public boolean hasRelation(int objectIndex, int attributeIndex) {
+	public boolean hasRelation(int objectIndex, int attributeIndex, double threshold) {
 		try {
-			return relations != null && relations[objectIndex][attributeIndex] > 0;
+			return relations != null && relations[objectIndex][attributeIndex] > threshold;
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Out of Bounds: Object Index = " + objectIndex + ", Attribute Index = "
 					+ attributeIndex + ", Object Count = " + this.objectCount() + ". Attribute Count = "

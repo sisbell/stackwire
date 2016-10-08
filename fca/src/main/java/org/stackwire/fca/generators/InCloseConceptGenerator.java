@@ -71,7 +71,7 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 			A.add(rnew, new ArrayList<Integer>());
 			B.add(rnew, new ArrayList<Integer>());
 			for (int i : A.get(r)) {
-				if (formalContext.hasRelation(i, j)) {
+				if (formalContext.hasRelation(i, j, 0)) {
 					if (!A.get(rnew).contains(i)) {
 						A.get(rnew).add(i);
 					}
@@ -101,7 +101,7 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 			for (int j = y; j >= B.get(r).get(k) + 1; j--) {
 				int h = 0;
 				for (h = 0; h <= A.get(rnew).size() - 1; h++) {
-					if (!formalContext.hasRelation(A.get(rnew).get(h), j)) {
+					if (!formalContext.hasRelation(A.get(rnew).get(h), j, 0)) {
 						break;
 					}
 				}
@@ -115,7 +115,7 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 		for (int j = y; j >= 0; j--) {
 			int h = 0;
 			for (h = 0; h <= A.get(rnew).size() - 1; h++) {
-				if (!formalContext.hasRelation(A.get(rnew).get(h), j)) {
+				if (!formalContext.hasRelation(A.get(rnew).get(h), j, 0)) {
 					break;
 				}
 			}
