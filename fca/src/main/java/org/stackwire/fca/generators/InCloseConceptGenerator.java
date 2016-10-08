@@ -35,8 +35,12 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 
 	private ArrayList<ArrayList<Integer>> B = new ArrayList<>();
 
+	private double threshold;
+
 	@Override
-	public Context generateConceptsFor(Context formalContext) {
+	public Context generateConceptsFor(Context formalContext, double threshold) {
+		this.threshold = threshold;
+
 		Concept sup = Concept.newSupremum(formalContext.objectCount() - 1);
 		formalContext.addConcept(sup);
 
@@ -46,8 +50,8 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 		inClose(formalContext, 0, 0);
 		for (int i = 0; i < A.size(); i++) {
 			if (!B.get(i).isEmpty()) {
-				Concept concept = Concept.create(new Extent(A.get(i)), new Intent(B.get(i)),
-						ConceptType.FORMAL_CONCEPT, new IndexTag(i));
+				Concept concept = Concept.create(new Extent(A.get(i)), new Intent(B.get(i)), ConceptType.FORMAL_CONCEPT,
+						new IndexTag(i));
 				formalContext.addConcept(concept);
 			}
 		}
@@ -71,7 +75,7 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 			A.add(rnew, new ArrayList<Integer>());
 			B.add(rnew, new ArrayList<Integer>());
 			for (int i : A.get(r)) {
-				if (formalContext.hasRelation(i, j, 0)) {
+				if (formalContext.hasRelation(i, j, threshold)) {
 					if (!A.get(rnew).contains(i)) {
 						A.get(rnew).add(i);
 					}
@@ -101,7 +105,7 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 			for (int j = y; j >= B.get(r).get(k) + 1; j--) {
 				int h = 0;
 				for (h = 0; h <= A.get(rnew).size() - 1; h++) {
-					if (!formalContext.hasRelation(A.get(rnew).get(h), j, 0)) {
+					if (!formalContext.hasRelation(A.get(rnew).get(h), j, threshold)) {
 						break;
 					}
 				}
@@ -115,7 +119,7 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 		for (int j = y; j >= 0; j--) {
 			int h = 0;
 			for (h = 0; h <= A.get(rnew).size() - 1; h++) {
-				if (!formalContext.hasRelation(A.get(rnew).get(h), j, 0)) {
+				if (!formalContext.hasRelation(A.get(rnew).get(h), j, threshold)) {
 					break;
 				}
 			}

@@ -43,14 +43,14 @@ public enum ConceptType {
 	 * @return concept type
 	 * 
 	 */
-	public static ConceptType getConceptType(Context formalContext, Extent extent, Intent intent) {
+	public static ConceptType getConceptType(Context formalContext, Extent extent, Intent intent, double threshold) {
 		if (formalContext == null) {
 			throw new IllegalArgumentException("formalContext is null");
 		}
 		AttributesCommonToObjectsFunction attributesFunction = new AttributesCommonToObjectsFunction(
-				formalContext.getRelations());
+				formalContext.getRelations(), threshold);
 		ObjectsCommonToAttributesFunction objectsFunction = new ObjectsCommonToAttributesFunction(
-				formalContext.getRelations());
+				formalContext.getRelations(), threshold);
 
 		Set<Integer> aOpr = attributesFunction.apply(extent.getIndicies());
 		Set<Integer> bOpr = objectsFunction.apply(intent.getIndicies());

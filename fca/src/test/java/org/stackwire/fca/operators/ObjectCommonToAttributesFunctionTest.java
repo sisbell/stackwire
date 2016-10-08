@@ -31,14 +31,14 @@ public class ObjectCommonToAttributesFunctionTest {
 
 	@Test
 	public void a() throws Exception {
-		ObjectsCommonToAttributesFunction function = new ObjectsCommonToAttributesFunction(relations);
+		ObjectsCommonToAttributesFunction function = new ObjectsCommonToAttributesFunction(relations, 0);
 		Set<Integer> result = function.apply(Arrays.asList(1, 2));
 		assertThat(result, hasItems(1, 2, 3));
 	}
 
 	@Test
 	public void b() throws Exception {
-		ObjectsCommonToAttributesFunction function = new ObjectsCommonToAttributesFunction(relations);
+		ObjectsCommonToAttributesFunction function = new ObjectsCommonToAttributesFunction(relations, 0);
 		Set<Integer> result = function.apply(Arrays.asList(0));
 		assertThat(result, hasItems(1, 3));
 	}

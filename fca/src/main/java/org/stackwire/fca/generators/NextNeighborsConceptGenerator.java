@@ -21,7 +21,7 @@ import org.stackwire.fca.Context;
 public class NextNeighborsConceptGenerator implements ConceptGenerator {
 
 	@Override
-	public Context generateConceptsFor(Context formalContext) {
+	public Context generateConceptsFor(Context formalContext, double threshold) {
 
 		return null;
 	}

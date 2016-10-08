@@ -31,12 +31,12 @@ import org.stackwire.fca.utils.Extents;
 public class AttributeIntersectionConceptGenerator implements ConceptGenerator {
 
 	@Override
-	public Context generateConceptsFor(Context formalContext) {
+	public Context generateConceptsFor(Context formalContext, double threshold) {
 		AttributesCommonToObjectsFunction attributesFunction = new AttributesCommonToObjectsFunction(
-				formalContext.getRelations());
+				formalContext.getRelations(), threshold);
 
 		ObjectsCommonToAttributesFunction objectsFunction = new ObjectsCommonToAttributesFunction(
-				formalContext.getRelations());
+				formalContext.getRelations(), threshold);
 
 		Concept sup = Concept.newSupremum(formalContext.objectCount() - 1);
 		formalContext.addConcept(sup);

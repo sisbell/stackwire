@@ -42,5 +42,5 @@ public class Intents {
 		}
 		return Optional.of(new Intent(intersectedSets));
 	}
-	
+
 }

@@ -27,14 +27,17 @@ import org.stackwire.fca.Context;
 public interface InputParser {
 
 	/**
-	 * Parse input stream and return formal context. It is required that the returned formal context must
-	 * already have all concepts generated.
+	 * Parse input stream and return formal context. It is required that the
+	 * returned formal context must already have all concepts generated.
 	 * 
-	 * @param inputStream input stream to parse
+	 * @param inputStream
+	 *            input stream to parse
 	 * @return formal context
-	 * @param generator the concept generator to use for adding concepts
-	 * @throws IOException if I/O or validation exception with stream
+	 * @param generator
+	 *            the concept generator to use for adding concepts
+	 * @throws IOException
+	 *             if I/O or validation exception with stream
 	 */
 	Context parse(InputStream inputStream, ConceptGenerator generator) throws IOException;
-	
+
 }

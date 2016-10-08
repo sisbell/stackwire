@@ -45,9 +45,9 @@ public class Extents {
 		}
 		return Optional.of(new Extent(intersectedSets));
 	}
-	
+
 	public static Optional<Extent> intersectExtents(Collection<Extent> extents) {
 		return intersect(extents.toArray(new Extent[extents.size()]));
 	}
-	
+
 }

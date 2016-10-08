@@ -5,9 +5,8 @@ package org.stackwire.fca.patterns;
 
 public class PatternConcept {
 
-	//private PatternExtent extent;
-	
-//	private PatternIntent intent;
-	
+	// private PatternExtent extent;
+
+	// private PatternIntent intent;
 
 }

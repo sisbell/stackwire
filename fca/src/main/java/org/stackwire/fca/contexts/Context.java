@@ -24,7 +24,8 @@ public interface Context {
 	 * @param objectIndex
 	 * @param attributeIndex
 	 */
-	void addRelation(int objectIndex, int attributeIndex);//PS: objectIndex, descriptionIndex
+	void addRelation(int objectIndex, int attributeIndex);// PS: objectIndex,
+															// descriptionIndex
 
 	/**
 	 * Returns true if each object has the specified attribute, otherwise false
@@ -45,7 +46,7 @@ public interface Context {
 
 	Context clarify();
 
-	List<String> getAttributeNames();//PS: descriptionNames???
+	List<String> getAttributeNames();// PS: descriptionNames???
 
 	List<String> getObjectNames();
 

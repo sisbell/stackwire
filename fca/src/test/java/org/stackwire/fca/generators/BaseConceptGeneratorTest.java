@@ -25,7 +25,7 @@ public abstract class BaseConceptGeneratorTest {
 	public void generate() throws Exception {
 		Context fc = Context.create(relations);
 		ConceptGenerator generator = getGenerator();
-		generator.generateConceptsFor(fc);
+		generator.generateConceptsFor(fc, 0);
 		Collection<Concept> result = fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
 		assertEquals(4, result.size());
 		// System.out.println(result);

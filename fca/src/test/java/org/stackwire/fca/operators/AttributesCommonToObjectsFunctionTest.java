@@ -32,28 +32,28 @@ public class AttributesCommonToObjectsFunctionTest {
 
 	@Test
 	public void all() throws Exception {
-		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
+		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations, 0);
 		Set<Integer> result = function.apply(Arrays.asList(1, 3));
 		assertThat(result, hasItems(0, 1, 2, 3));
 	}
 
 	@Test
 	public void empty() throws Exception {
-		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
+		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations, 0);
 		Set<Integer> result = function.apply(Arrays.asList(0));
 		assertEquals(0, result.size());
 	}
 
 	@Test
 	public void nullParam() throws Exception {
-		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
+		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations, 0);
 		Set<Integer> result = function.apply(null);
 		assertEquals(4, result.size());
 	}
 
 	@Test
 	public void intersection() throws Exception {
-		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
+		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations, 0);
 		Set<Integer> result = function.apply(Arrays.asList(1, 2));
 		assertThat(result, hasItems(1, 2));
 	}

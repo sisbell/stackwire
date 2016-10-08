@@ -29,13 +29,16 @@ public class ObjectsCommonToAttributesFunction implements Function<Collection<In
 
 	private final double[][] relations;
 
-	public ObjectsCommonToAttributesFunction(double[][] relations) {
+	private final double threshold;
+
+	public ObjectsCommonToAttributesFunction(double[][] relations, double threshold) {
 		this.relations = relations;
+		this.threshold = threshold;
 	}
 
 	@Override
 	public Set<Integer> apply(Collection<Integer> indicies) { // attributes
-		if(indicies == null || indicies.isEmpty()) {
+		if (indicies == null || indicies.isEmpty()) {
 			return Utils.rangeSet(0, relations.length - 1);
 		}
 		Set<Integer> objects = new HashSet<>();
@@ -43,7 +46,7 @@ public class ObjectsCommonToAttributesFunction implements Function<Collection<In
 		for (int i = 0; i < rows; i++) {
 			boolean add = true;
 			for (int j : indicies) {// cols
-				if (relations[i][j] == 0) {
+				if (relations[i][j] <= threshold) {
 					add = false;
 					break;
 				}

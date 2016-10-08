@@ -36,5 +36,5 @@ public class IndexTag implements ConceptTag {
 	public String toString() {
 		return "IndexTag [index=" + index + "]";
 	}
-	
+
 }

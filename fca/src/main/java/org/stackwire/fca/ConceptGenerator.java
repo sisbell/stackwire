@@ -28,5 +28,5 @@ public interface ConceptGenerator {
 	 *            formal context
 	 * @return specified formal context
 	 */
-	Context generateConceptsFor(Context formalContext);
+	Context generateConceptsFor(Context formalContext, double threshold);
 }

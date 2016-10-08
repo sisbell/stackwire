@@ -12,21 +12,20 @@ public class PatternStructure {
 	/**
 	 * 
 	 * @param objectNames
-	 * @param descriptions complete meet semilattice of descriptions
+	 * @param descriptions
+	 *            complete meet semilattice of descriptions
 	 * @param relations
 	 * @return
 	 */
 	public static PatternStructure create(List<String> objectNames, List<Description> descriptions, int[][] relations) {
 		return null;
 	}
-	
+
 	private Collection<PatternConcept> concepts = new ArrayList<>();
-	
+
 	/**
 	 * Objects to description cross table
 	 */
 	private int[][] relations;
-	
-	
 
 }

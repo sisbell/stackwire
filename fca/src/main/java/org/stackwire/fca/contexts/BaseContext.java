@@ -17,7 +17,7 @@ public class BaseContext implements Context {
 	@Override
 	public void addRelation(int objectIndex, int attributeIndex) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

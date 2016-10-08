@@ -2,7 +2,6 @@ package org.stackwire.fca.patterns;
 
 import java.util.ArrayList;
 
-
 /**
  * Similarity of objects
  */

@@ -37,14 +37,14 @@ import org.stackwire.fca.functions.AttributesCommonToObjectsFunction;
 public class NaiveConceptGenerator implements ConceptGenerator {
 
 	@Override
-	public Context generateConceptsFor(Context formalContext) {
+	public Context generateConceptsFor(Context formalContext, double threshold) {
 		Set<Set<Integer>> powerSet = formalContext.powerSetOfObjects();
 		Function<Collection<Integer>, Set<Integer>> commonAttributes = new AttributesCommonToObjectsFunction(
-				formalContext.getRelations());
+				formalContext.getRelations(), threshold);
 		for (Set<Integer> objects : powerSet) {
 			Extent extent = new Extent(objects);
 			Intent intent = new Intent(commonAttributes.apply(objects));
-			ConceptType conceptType = ConceptType.getConceptType(formalContext, extent, intent);
+			ConceptType conceptType = ConceptType.getConceptType(formalContext, extent, intent, threshold);
 			formalContext.addConcept(Concept.create(extent, intent, conceptType, null));
 		}
 		return formalContext;

@@ -31,20 +31,20 @@ import org.stackwire.fca.utils.Intents;
 public class ObjectIntersectionConceptGenerator implements ConceptGenerator {
 
 	@Override
-	public Context generateConceptsFor(Context formalContext) {
+	public Context generateConceptsFor(Context formalContext, double threshold) {
 		AttributesCommonToObjectsFunction attributesFunction = new AttributesCommonToObjectsFunction(
-				formalContext.getRelations());
+				formalContext.getRelations(), threshold);
 
 		ObjectsCommonToAttributesFunction objectsFunction = new ObjectsCommonToAttributesFunction(
-				formalContext.getRelations());
+				formalContext.getRelations(), threshold);
 
 		Concept sup = Concept.newSupremum(formalContext.objectCount() - 1);
 		formalContext.addConcept(sup);
-		
+
 		Concept inf = Concept.newInfimum(formalContext.attributeCount() - 1);
 		objectsFunction.apply(inf.getIntent().getIndicies());
-		
-		formalContext.addConcept(Concept.create(new Extent(objectsFunction.apply(inf.getIntent().getIndicies())), 
+
+		formalContext.addConcept(Concept.create(new Extent(objectsFunction.apply(inf.getIntent().getIndicies())),
 				inf.getIntent(), ConceptType.FORMAL_CONCEPT));
 
 		for (int g = 0; g < formalContext.objectCount(); g++) {
@@ -54,10 +54,10 @@ public class ObjectIntersectionConceptGenerator implements ConceptGenerator {
 				if (intersectIntent.isPresent()) {
 					Intent intent = intersectIntent.get();
 					if (!formalContext.hasConceptOf(intent, ConceptType.FORMAL_CONCEPT)) {
-						Concept newConcept = Concept.create(new Extent(objectsFunction.apply(intent.getIndicies())), intent,
-								ConceptType.FORMAL_CONCEPT);
+						Concept newConcept = Concept.create(new Extent(objectsFunction.apply(intent.getIndicies())),
+								intent, ConceptType.FORMAL_CONCEPT);
 						formalContext.addConcept(newConcept);
-					} 
+					}
 				}
 			}
 		}

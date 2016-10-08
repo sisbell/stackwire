@@ -29,26 +29,29 @@ public class AttributesCommonToObjectsFunction implements Function<Collection<In
 
 	private final double[][] relations;
 
-	public AttributesCommonToObjectsFunction(double[][] relations) {
+	private final double threshold;
+
+	public AttributesCommonToObjectsFunction(double[][] relations, double threshold) {
 		this.relations = relations;
+		this.threshold = threshold;
 	}
 
 	@Override
 	public Set<Integer> apply(Collection<Integer> indicies) { // objects
-		if(indicies == null || indicies.isEmpty()) {
+		if (indicies == null || indicies.isEmpty()) {
 			return Utils.rangeSet(0, relations[0].length - 1);
 		}
 		Set<Integer> attributes = new HashSet<>();
 		int cols = relations[0].length;
 		for (int j = 0; j < cols; j++) {
-			boolean add = true;	
-			for (int i : indicies) {// rows				
-				if (relations[i][j] == 0) {
+			boolean add = true;
+			for (int i : indicies) {// rows
+				if (relations[i][j] <= threshold) {
 					add = false;
 					break;
 				}
 			}
-			if(add) {
+			if (add) {
 				attributes.add(j);
 			}
 		}

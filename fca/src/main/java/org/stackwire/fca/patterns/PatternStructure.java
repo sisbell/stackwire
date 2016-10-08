@@ -3,25 +3,22 @@ package org.stackwire.fca.patterns;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
 /**
  * Equivalent to formal context
  *
  */
 public class PatternStructure {
-	
-	
 
 	private Collection<PatternConcept> concepts = new ArrayList<>();
-	
-	//private Map<Integer, Description> relations = new HashMap<>();
-	
+
+	// private Map<Integer, Description> relations = new HashMap<>();
+
 	private int[][] relations;
-	
+
 	public void addConcept(PatternConcept patternConcept) {
 		concepts.add(patternConcept);
 	}
-	
+
 	/**
 	 * Add relation to context
 	 * 
@@ -31,7 +28,7 @@ public class PatternStructure {
 	public void addRelation(int objectIndex, int descriptionIndex) {
 		relations[objectIndex][descriptionIndex] = 1;
 	}
-	
+
 	/**
 	 * Returns true if object has description, otherwise false
 	 * 
