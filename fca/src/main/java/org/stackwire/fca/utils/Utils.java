@@ -29,14 +29,14 @@ import com.google.common.collect.Sets;
 
 public class Utils {
 
-	public static Set<Integer> duplicateColumns(int[][] crossTable, int[] sourceColumn, int columnOffset,
+	public static Set<Integer> duplicateColumns(double[][] crossTable, double[] sourceColumn, int columnOffset,
 			Set<Integer> skipColumns) {
 		Set<Integer> dupColumns = new HashSet<>();
 		for (int j = columnOffset; j < crossTable[0].length; j++) {
 			if (skipColumns != null && skipColumns.contains(j)) {
 				continue;
 			}
-		
+
 			boolean isDuplicationColumn = true;
 			for (int i = 0; i < crossTable.length; i++) {
 				if (sourceColumn[i] != crossTable[i][j]) {
@@ -51,8 +51,8 @@ public class Utils {
 
 		return dupColumns;
 	}
-	
-	public static Set<Integer> duplicateRows(int[][] crossTable, int[] sourceRow, int rowOffset,
+
+	public static Set<Integer> duplicateRows(double[][] crossTable, double[] sourceRow, int rowOffset,
 			Set<Integer> skipRows) {
 		Set<Integer> dupRows = new HashSet<>();
 		for (int i = rowOffset; i < crossTable.length; i++) {
@@ -65,7 +65,7 @@ public class Utils {
 		}
 		return dupRows;
 	}
-	
+
 	public static Set<Integer> intersect(Set<Set<Integer>> set) {
 		Iterator<Set<Integer>> it = set.iterator();
 		Set<Integer> result = it.next();
@@ -90,30 +90,32 @@ public class Utils {
 	/**
 	 * 
 	 * @param crossTable
-	 * @param rowsToRemove rows to remove from cross table
-	 * @param columnsToRemove columns to remove from cross table
+	 * @param rowsToRemove
+	 *            rows to remove from cross table
+	 * @param columnsToRemove
+	 *            columns to remove from cross table
 	 * @return
 	 */
-	public static int[][] remove(int crossTable[][], Collection<Integer> rowsToRemove,
+	public static double[][] remove(double crossTable[][], Collection<Integer> rowsToRemove,
 			Collection<Integer> columnsToRemove) {
-		if(crossTable == null) {
+		if (crossTable == null) {
 			throw new IllegalArgumentException("crossTable is null");
 		}
-		
-		if(rowsToRemove == null) {
+
+		if (rowsToRemove == null) {
 			rowsToRemove = ImmutableSet.of();
 		}
-		if(columnsToRemove == null) {
+		if (columnsToRemove == null) {
 			columnsToRemove = ImmutableSet.of();
 		}
-		
-		if(rowsToRemove.isEmpty() && columnsToRemove.isEmpty()) {
+
+		if (rowsToRemove.isEmpty() && columnsToRemove.isEmpty()) {
 			return crossTable;
 		}
-		
+
 		int rows = crossTable.length;
 		int columns = crossTable[0].length;
-		int newCrossTable[][] = new int[rows - rowsToRemove.size()][columns - columnsToRemove.size()];
+		double newCrossTable[][] = new double[rows - rowsToRemove.size()][columns - columnsToRemove.size()];
 
 		int newRow = 0;
 		for (int i = 0; i < rows; ++i) {

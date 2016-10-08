@@ -25,26 +25,26 @@ public class ContextTest {
 
 	@Test
 	public void clarifyNames() throws Exception {
-		int[][] relations = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] relations = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
 
 		Context fc = Context.create(relations);
 		Context clarifiedContext = fc.clarify();
-		
-		assertTrue( clarifiedContext.getObjectNames().containsAll(Arrays.asList("x1", "x2", "x3", "x5")));
-		assertTrue( clarifiedContext.getAttributeNames().containsAll(Arrays.asList("y1", "y2", "y3")));
+
+		assertTrue(clarifiedContext.getObjectNames().containsAll(Arrays.asList("x1", "x2", "x3", "x5")));
+		assertTrue(clarifiedContext.getAttributeNames().containsAll(Arrays.asList("y1", "y2", "y3")));
 	}
-	
+
 	/**
 	 * Example 2.39 (INTRODUCTION TO FORMAL CONCEPT ANALYSIS, 2008 - BELOHLAVEK)
 	 */
 	@Test
 	public void clarifyRelations() throws Exception {
-		int[][] clarifiedRelations = { { 1, 1, 1 }, { 1, 0, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
-		int[][] relations = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] clarifiedRelations = { { 1, 1, 1 }, { 1, 0, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
+		double[][] relations = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
 
 		Context fc = Context.create(relations);
 		Context clarifiedContext = fc.clarify();
 		assertTrue(Arrays.deepEquals(clarifiedRelations, clarifiedContext.getRelations()));
-		
+
 	}
 }

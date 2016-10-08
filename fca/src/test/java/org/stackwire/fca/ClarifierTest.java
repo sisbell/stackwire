@@ -25,11 +25,11 @@ public class ClarifierTest {
 
 	@Test
 	public void clarify() throws Exception {
-		int[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
-		int[][] expected = { { 1, 1, 1 }, { 1, 0, 1 }, { 0, 1, 1 }, { 1, 0, 0 }};
+		double[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] expected = { { 1, 1, 1 }, { 1, 0, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
 
-		int[][] result = Clarifier.clarify(crossTable).getClarifiedCrossTable();
-		
+		double[][] result = Clarifier.clarify(crossTable).getClarifiedCrossTable();
+
 		assertTrue(Arrays.deepEquals(expected, result));
 
 	}

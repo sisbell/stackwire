@@ -19,11 +19,13 @@ package org.stackwire.fca;
  * Service generates concepts and adds them to the context
  */
 public interface ConceptGenerator {
-	
+
 	/**
-	 * Generates concepts for specified formal context and returns the same context with the concepts added
+	 * Generates concepts for specified formal context and returns the same
+	 * context with the concepts added
 	 * 
-	 * @param formalContext formal context 
+	 * @param formalContext
+	 *            formal context
 	 * @return specified formal context
 	 */
 	Context generateConceptsFor(Context formalContext);

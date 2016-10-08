@@ -27,9 +27,9 @@ import org.stackwire.fca.utils.Utils;
  */
 public class AttributesCommonToObjectsFunction implements Function<Collection<Integer>, Set<Integer>> {
 
-	private final int[][] relations;
+	private final double[][] relations;
 
-	public AttributesCommonToObjectsFunction(int[][] relations) {
+	public AttributesCommonToObjectsFunction(double[][] relations) {
 		this.relations = relations;
 	}
 

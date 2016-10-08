@@ -18,7 +18,7 @@ import org.stackwire.fca.tags.IndexTag;
 
 public abstract class BaseConceptGeneratorTest {
 
-	private static final int[][] relations = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 }, { 1, 1, 1, 1 },
+	private static final double[][] relations = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 }, { 1, 1, 1, 1 },
 			{ 0, 0, 0, 0 }, { 0, 1, 0, 0 } };
 
 	@Test
@@ -28,7 +28,7 @@ public abstract class BaseConceptGeneratorTest {
 		generator.generateConceptsFor(fc);
 		Collection<Concept> result = fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
 		assertEquals(4, result.size());
-		//System.out.println(result);
+		// System.out.println(result);
 		Concept fc0 = Concept.create(new Extent(Arrays.asList(1, 3)), new Intent(Arrays.asList(0, 1, 2, 3)),
 				ConceptType.FORMAL_CONCEPT);
 		Concept fc1 = Concept.create(new Extent(Arrays.asList(1, 2, 3)), new Intent(Arrays.asList(1, 2)),
@@ -41,7 +41,7 @@ public abstract class BaseConceptGeneratorTest {
 		List<Concept> expectedConcepts = Arrays.asList(fc0, fc1, fc2, fc3);
 		assertTrue(result.containsAll(expectedConcepts));
 	}
-	
+
 	protected abstract ConceptGenerator getGenerator();
-	
+
 }

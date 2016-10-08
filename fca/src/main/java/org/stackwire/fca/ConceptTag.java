@@ -16,9 +16,11 @@
 package org.stackwire.fca;
 
 /**
- * Tag used in the creation of a concept. It is used to add developer specified meta-information to the concept.
+ * Tag used in the creation of a concept. It is used to add developer specified
+ * meta-information to the concept.
  * 
- * @see Concept.create(Extent extent, Intent intent, ConceptType conceptType, ConceptTag conceptTag)
+ * @see Concept.create(Extent extent, Intent intent, ConceptType conceptType,
+ *      ConceptTag conceptTag)
  */
 public interface ConceptTag {
 

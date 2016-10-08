@@ -27,34 +27,34 @@ import org.stackwire.fca.functions.AttributesCommonToObjectsFunction;
 
 public class AttributesCommonToObjectsFunctionTest {
 
-	private static final int[][] relations = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 }, { 1, 1, 1, 1 }, { 0, 0, 0, 0 },
-			{ 0, 1, 0, 0 } };
+	private static final double[][] relations = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 }, { 1, 1, 1, 1 },
+			{ 0, 0, 0, 0 }, { 0, 1, 0, 0 } };
+
 	@Test
 	public void all() throws Exception {
 		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
-		Set<Integer> result = function.apply(Arrays.asList(1, 3));		
+		Set<Integer> result = function.apply(Arrays.asList(1, 3));
 		assertThat(result, hasItems(0, 1, 2, 3));
 	}
-	
+
 	@Test
 	public void empty() throws Exception {
 		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
-		Set<Integer> result = function.apply(Arrays.asList(0));		
+		Set<Integer> result = function.apply(Arrays.asList(0));
 		assertEquals(0, result.size());
 	}
-	
+
 	@Test
 	public void nullParam() throws Exception {
 		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
-		Set<Integer> result = function.apply(null);		
+		Set<Integer> result = function.apply(null);
 		assertEquals(4, result.size());
 	}
-	
-	
+
 	@Test
 	public void intersection() throws Exception {
 		AttributesCommonToObjectsFunction function = new AttributesCommonToObjectsFunction(relations);
-		Set<Integer> result = function.apply(Arrays.asList(1, 2));		
+		Set<Integer> result = function.apply(Arrays.asList(1, 2));
 		assertThat(result, hasItems(1, 2));
 	}
 }

@@ -36,15 +36,16 @@ public final class Clarifier {
 
 		private final Set<Integer> duplicateColumns;
 
-		private int[][] clarifiedCrossTable;
+		private double[][] clarifiedCrossTable;
 
-		public ClarifierResult(int[][] clarifiedCrossTable, Set<Integer> duplicateRows, Set<Integer> duplicateColumns) {
+		public ClarifierResult(double[][] clarifiedCrossTable, Set<Integer> duplicateRows,
+				Set<Integer> duplicateColumns) {
 			this.clarifiedCrossTable = clarifiedCrossTable;
 			this.duplicateRows = duplicateRows;
 			this.duplicateColumns = duplicateColumns;
 		}
 
-		public int[][] getClarifiedCrossTable() {
+		public double[][] getClarifiedCrossTable() {
 			return clarifiedCrossTable;
 		}
 
@@ -57,14 +58,16 @@ public final class Clarifier {
 		}
 
 	}
-	
+
 	/**
-	 * Removes duplicate rows and duplicate columns from the specified cross table and returns results
+	 * Removes duplicate rows and duplicate columns from the specified cross
+	 * table and returns results
 	 * 
-	 * @param crossTable source cross table to analyze
+	 * @param crossTable
+	 *            source cross table to analyze
 	 * @return results clarifier result
 	 */
-	public static ClarifierResult clarify(int crossTable[][]) {
+	public static ClarifierResult clarify(double crossTable[][]) {
 		Set<Integer> duplicateRows = new HashSet<>();
 		for (int i = 0; i < crossTable.length - 1; i++) {
 			duplicateRows.addAll(duplicateRows(crossTable, crossTable[i], i + 1, duplicateRows));
@@ -72,7 +75,7 @@ public final class Clarifier {
 
 		Set<Integer> duplicateColumns = new HashSet<>();
 		for (int j = 0; j < crossTable.length - 1; j++) {
-			int[] sourceColumn = new int[crossTable.length];
+			double[] sourceColumn = new double[crossTable.length];
 			for (int i = 0; i < crossTable.length - 1; i++) {
 				sourceColumn[i] = crossTable[i][j];
 			}
@@ -83,6 +86,7 @@ public final class Clarifier {
 				duplicateColumns);
 	}
 
-	private Clarifier() { }
+	private Clarifier() {
+	}
 
 }

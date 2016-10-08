@@ -27,7 +27,7 @@ public class ContextTestFactory {
 	 * @return
 	 */
 	public static Context vertebateAnimals() {
-		int[][] relations = { { 0, 1, 0, 0, 1, 1, 0, 1, 0 }, { 0, 1, 1, 0, 1, 1, 0, 0, 0 },
+		double[][] relations = { { 0, 1, 0, 0, 1, 1, 0, 1, 0 }, { 0, 1, 1, 0, 1, 1, 0, 0, 0 },
 				{ 0, 0, 0, 1, 1, 0, 0, 1, 0 }, { 1, 0, 1, 0, 1, 0, 1, 0, 0 }, { 0, 0, 1, 0, 1, 1, 1, 0, 0 },
 				{ 1, 0, 0, 0, 1, 0, 1, 0, 0 }, { 1, 0, 0, 0, 1, 0, 1, 0, 1 } };
 		return Context.create(

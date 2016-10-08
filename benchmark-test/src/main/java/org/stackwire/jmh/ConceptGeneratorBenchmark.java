@@ -38,7 +38,7 @@ import org.stackwire.fca.generators.NaiveConceptGenerator;
 
 public class ConceptGeneratorBenchmark {
 
-	private static final int[][] relations = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 }, { 1, 1, 1, 1 },
+	private static final double[][] relations = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 }, { 1, 1, 1, 1 },
 			{ 0, 0, 0, 0 }, { 0, 1, 0, 0 } };
 	
     @Benchmark

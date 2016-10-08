@@ -26,21 +26,21 @@ import org.stackwire.fca.functions.ObjectsCommonToAttributesFunction;
 
 public class ObjectCommonToAttributesFunctionTest {
 
-	private static final int[][] relations = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 }, { 1, 1, 1, 1 }, { 0, 0, 0, 0 },
-			{ 0, 1, 0, 0 } };
+	private static final double[][] relations = { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 1, 1, 0 }, { 1, 1, 1, 1 },
+			{ 0, 0, 0, 0 }, { 0, 1, 0, 0 } };
+
 	@Test
 	public void a() throws Exception {
 		ObjectsCommonToAttributesFunction function = new ObjectsCommonToAttributesFunction(relations);
-		Set<Integer> result = function.apply(Arrays.asList(1, 2));		
+		Set<Integer> result = function.apply(Arrays.asList(1, 2));
 		assertThat(result, hasItems(1, 2, 3));
 	}
-	
+
 	@Test
 	public void b() throws Exception {
 		ObjectsCommonToAttributesFunction function = new ObjectsCommonToAttributesFunction(relations);
-		Set<Integer> result = function.apply(Arrays.asList(0));		
+		Set<Integer> result = function.apply(Arrays.asList(0));
 		assertThat(result, hasItems(1, 3));
 	}
-	
-	
+
 }

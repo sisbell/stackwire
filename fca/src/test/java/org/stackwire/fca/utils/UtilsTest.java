@@ -27,11 +27,11 @@ public class UtilsTest {
 	
 	@Test
 	public void duplicateAndRemoveColumns() throws Exception {
-		int[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
-		int[][] expected = { { 1, 1 }, { 1, 0 }, { 0, 1 }, { 0, 1 }, { 1, 0 } };
+		double[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] expected = { { 1, 1 }, { 1, 0 }, { 0, 1 }, { 0, 1 }, { 1, 0 } };
 
-		Set<Integer> results = Utils.duplicateColumns(crossTable, new int[] { 1, 1, 1, 1, 0 }, 0, null);
-		int[][] result = Utils.remove(crossTable, Arrays.asList(), results);
+		Set<Integer> results = Utils.duplicateColumns(crossTable, new double[] { 1, 1, 1, 1, 0 }, 0, null);
+		double[][] result = Utils.remove(crossTable, Arrays.asList(), results);
 
 		assertTrue(Arrays.deepEquals(expected, result));
 
@@ -39,9 +39,9 @@ public class UtilsTest {
 
 	@Test
 	public void duplicateColumns() throws Exception {
-		int[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
 
-		Set<Integer> results = Utils.duplicateColumns(crossTable, new int[] { 1, 1, 1, 1, 0 }, 0, null);
+		Set<Integer> results = Utils.duplicateColumns(crossTable, new double[] { 1, 1, 1, 1, 0 }, 0, null);
 		assertEquals(2, results.size());
 		assertTrue(results.contains(2));
 		assertTrue(results.contains(3));
@@ -49,9 +49,9 @@ public class UtilsTest {
 
 	@Test
 	public void duplicateRows() throws Exception {
-		int[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 1, 1, 1 } };
+		double[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 1, 1, 1 } };
 
-		Set<Integer> results = Utils.duplicateRows(crossTable, new int[] { 1, 1, 1, 1 }, 0, null);
+		Set<Integer> results = Utils.duplicateRows(crossTable, new double[] { 1, 1, 1, 1 }, 0, null);
 		assertEquals(2, results.size());
 		assertTrue(results.contains(0));
 		assertTrue(results.contains(4));
@@ -59,30 +59,30 @@ public class UtilsTest {
 
 	@Test
 	public void removeColumn() throws Exception {
-		int[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
-		int[][] expected = { { 1, 1, 1 }, { 1, 0, 1 }, { 0, 1, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
+		double[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] expected = { { 1, 1, 1 }, { 1, 0, 1 }, { 0, 1, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
 
-		int[][] result = Utils.remove(crossTable, Arrays.asList(), Arrays.asList(2));
+		double[][] result = Utils.remove(crossTable, Arrays.asList(), Arrays.asList(2));
 
 		assertTrue(Arrays.deepEquals(expected, result));
 	}
 
 	@Test
 	public void removeRow() throws Exception {
-		int[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
-		int[][] expected = { { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] expected = { { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
 
-		int[][] result = Utils.remove(crossTable, Arrays.asList(0), Arrays.asList());
+		double[][] result = Utils.remove(crossTable, Arrays.asList(0), Arrays.asList());
 
 		assertTrue(Arrays.deepEquals(expected, result));
 	}
 
 	@Test
 	public void removeRowAndColumn() throws Exception {
-		int[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
-		int[][] expected = { { 1, 0, 1 }, { 0, 1, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
+		double[][] crossTable = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
+		double[][] expected = { { 1, 0, 1 }, { 0, 1, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
 
-		int[][] result = Utils.remove(crossTable, Arrays.asList(0), Arrays.asList(2));
+		double[][] result = Utils.remove(crossTable, Arrays.asList(0), Arrays.asList(2));
 
 		assertTrue(Arrays.deepEquals(expected, result));
 	}

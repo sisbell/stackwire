@@ -61,9 +61,9 @@ public class Context {
 	 * @param relations
 	 * @return formal context with specified relations
 	 */
-	public static Context create(int[][] relations) {
-		return new Context(generateLabel(relations.length, "x"), generateLabel(relations[0].length, "y"),
-				relations, null);
+	public static Context create(double[][] relations) {
+		return new Context(generateLabel(relations.length, "x"), generateLabel(relations[0].length, "y"), relations,
+				null);
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class Context {
 	 * @param descriptionPaths
 	 * @return formal context
 	 */
-	public static Context create(List<String> objectNames, List<String> attributeNames, int[][] relations,
+	public static Context create(List<String> objectNames, List<String> attributeNames, double[][] relations,
 			int[][] descriptionPaths) {
 		return new Context(objectNames, attributeNames, relations, descriptionPaths);
 	}
@@ -122,7 +122,7 @@ public class Context {
 	/**
 	 * Boolean cross table of relations.
 	 */
-	private final int[][] relations;
+	private final double[][] relations;
 
 	/**
 	 * Transition table for descriptions
@@ -165,7 +165,7 @@ public class Context {
 	 * @param relations
 	 * @param paths
 	 */
-	private Context(List<String> objectNames, List<String> attributeNames, int[][] relations, int[][] paths) {
+	private Context(List<String> objectNames, List<String> attributeNames, double[][] relations, int[][] paths) {
 		if (objectNames == null || objectNames.isEmpty()) {
 			throw new IllegalArgumentException("objectNames is empty");
 		}
@@ -176,7 +176,7 @@ public class Context {
 		this.objectNames = new ArrayList<>(objectNames);
 		this.attributeNames = new ArrayList<>(attributeNames);
 		if (relations == null) {
-			this.relations = new int[objectNames.size()][attributeNames.size()];
+			this.relations = new double[objectNames.size()][attributeNames.size()];
 		} else {
 			this.relations = relations;
 		}
@@ -274,8 +274,7 @@ public class Context {
 			newAttributeNames.remove(columnIndex);
 		}
 
-		return Context.create(newObjectNames, newAttributeNames, result.getClarifiedCrossTable(),
-				descriptionPaths);
+		return Context.create(newObjectNames, newAttributeNames, result.getClarifiedCrossTable(), descriptionPaths);
 	}
 
 	/**
@@ -372,7 +371,7 @@ public class Context {
 	 * 
 	 * @return relation cross table of this context.
 	 */
-	public int[][] getRelations() {
+	public double[][] getRelations() {
 		return relations;
 	}
 
@@ -465,11 +464,9 @@ public class Context {
 	public Context reduce() {
 		return null;
 	}
-	
+
 	/*
-	public ConceptLattice findConceptLattice() {
-		return null;
-	}
-	*/
+	 * public ConceptLattice findConceptLattice() { return null; }
+	 */
 
 }

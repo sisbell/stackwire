@@ -34,10 +34,12 @@ public final class Concept {
 	public static class Extent extends SemanticIndexSet {
 
 		/**
-		 * Returns intersection of all specified extents, or empty if no intersection
+		 * Returns intersection of all specified extents, or empty if no
+		 * intersection
 		 * 
-		 * @param extents 
-		 * @return intersection of all specified extents, or empty if no intersection
+		 * @param extents
+		 * @return intersection of all specified extents, or empty if no
+		 *         intersection
 		 */
 		public static Optional<Extent> intersection(Extent... extents) {
 			Set<Set<Integer>> sets = Utils.toSets(extents);
@@ -54,7 +56,7 @@ public final class Concept {
 		public Extent() {
 			super();
 		}
-		
+
 		public Extent(Collection<Integer> indicies) {
 			super(indicies);
 		}
@@ -79,9 +81,12 @@ public final class Concept {
 	/**
 	 * Create concept
 	 * 
-	 * @param extent extent of the concept
-	 * @param intent intent of concept
-	 * @param conceptType concept type. May be null.
+	 * @param extent
+	 *            extent of the concept
+	 * @param intent
+	 *            intent of concept
+	 * @param conceptType
+	 *            concept type. May be null.
 	 * @return concept
 	 */
 	public static Concept create(Extent extent, Intent intent, ConceptType conceptType) {
@@ -91,10 +96,14 @@ public final class Concept {
 	/**
 	 * Create concept
 	 * 
-	 * @param extent extent of the concept
-	 * @param intent intent of concept
-	 * @param conceptType concept type. May be null.
-	 * @param conceptTag concept tag for additional meta-information
+	 * @param extent
+	 *            extent of the concept
+	 * @param intent
+	 *            intent of concept
+	 * @param conceptType
+	 *            concept type. May be null.
+	 * @param conceptTag
+	 *            concept tag for additional meta-information
 	 * 
 	 * @return concept
 	 */
@@ -106,7 +115,7 @@ public final class Concept {
 		return Concept.create(new Extent(), new Intent(Utils.range(0, count)), ConceptType.FORMAL_CONCEPT,
 				new IndexTag(0));
 	}
-	
+
 	/**
 	 * Returns supremum. This concept contains the set of objects that have the
 	 * null element as an attribute element. This is all objects.

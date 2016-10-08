@@ -21,18 +21,18 @@ import java.io.InputStream;
 import org.stackwire.fca.io.InputParser;
 
 public final class FCA {
-	
+
 	private final ConceptGenerator generator;
-	
+
 	private final InputParser inputParser;
 
 	public FCA(ConceptGenerator generator, InputParser inputParser) {
 		this.generator = generator;
 		this.inputParser = inputParser;
 	}
-	
+
 	public Context generateFrom(InputStream input) throws IOException {
 		return inputParser.parse(input, generator);
-	//	return generator.generateConceptsFor(ctx);
+		// return generator.generateConceptsFor(ctx);
 	}
 }
