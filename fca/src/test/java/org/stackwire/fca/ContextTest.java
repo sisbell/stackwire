@@ -27,7 +27,7 @@ public class ContextTest {
 	public void clarifyNames() throws Exception {
 		double[][] relations = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
 
-		Context fc = Context.create(relations);
+		Context fc = new Context.ContextBuilder(relations).build();
 		Context clarifiedContext = fc.clarify();
 
 		assertTrue(clarifiedContext.getObjectNames().containsAll(Arrays.asList("x1", "x2", "x3", "x5")));
@@ -42,7 +42,7 @@ public class ContextTest {
 		double[][] clarifiedRelations = { { 1, 1, 1 }, { 1, 0, 1 }, { 0, 1, 1 }, { 1, 0, 0 } };
 		double[][] relations = { { 1, 1, 1, 1 }, { 1, 0, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 } };
 
-		Context fc = Context.create(relations);
+		Context fc = new Context.ContextBuilder(relations).build();
 		Context clarifiedContext = fc.clarify();
 		assertTrue(Arrays.deepEquals(clarifiedRelations, clarifiedContext.getRelations()));
 

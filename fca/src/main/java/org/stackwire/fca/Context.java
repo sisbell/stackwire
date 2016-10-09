@@ -38,47 +38,97 @@ import com.google.common.collect.Sets;
  */
 public class Context {
 
-	/**
-	 * Create formal context with the specified number of objects and the
-	 * specified number of attributes. When creating with this method, the
-	 * relations are empty and will need to be added using
-	 * FormalContext.addRelation
-	 * 
-	 * @param objectCount
-	 *            number of objects in context
-	 * @param attributeCount
-	 *            number of attributes in context
-	 * @return new formal context
-	 */
-	public static Context create(int objectCount, int attributeCount) {
-		return new Context(generateLabel(objectCount, "x"), generateLabel(attributeCount, "y"));
-	}
+	public static final class ContextBuilder {
 
-	/**
-	 * Creates formal context with specified relations. The object and attribute
-	 * labels will automatically be generated.
-	 * 
-	 * @param relations
-	 * @return formal context with specified relations
-	 */
-	public static Context create(double[][] relations) {
-		return new Context(generateLabel(relations.length, "x"), generateLabel(relations[0].length, "y"), relations,
-				null);
-	}
+		/**
+		 * Generates list of strings with each entry as {prefix + count}
+		 * 
+		 * @param count
+		 *            size of list to generate
+		 * @param prefix
+		 *            prefix to use in constructing strings
+		 * 
+		 * @return list of strings with each entry as {prefix + count}
+		 */
+		private static ArrayList<String> generateLabel(int count, String prefix) {
+			ArrayList<String> s = new ArrayList<>();
+			for (int i = 1; i <= count; i++) {
+				s.add(prefix + i);
+			}
+			return s;
+		}
 
-	/**
-	 * Creates formal context with the specified object names and attribute
-	 * names. When creating with this method, the relations are empty and will
-	 * need to be added using FormalContext.addRelation
-	 * 
-	 * @param objectNames
-	 *            object names
-	 * @param attributeNames
-	 *            attribute names
-	 * @return new formal context
-	 */
-	public static Context create(List<String> objectNames, List<String> attributeNames) {
-		return new Context(objectNames, attributeNames);
+		private int attributeCount;
+
+		private List<String> attributeNames;
+
+		private int objectCount;
+
+		private List<String> objectNames;
+
+		private double[][] relations;
+
+		public ContextBuilder(double[][] relations) {
+			this.relations = relations;
+			this.objectCount = relations.length;
+			this.attributeCount = relations[0].length;
+		}
+
+		public ContextBuilder(int objectCount, int attributeCount) {
+			this.objectCount = objectCount;
+			this.attributeCount = attributeCount;
+		}
+
+		public ContextBuilder(List<String> objectNames, List<String> attributeNames) {
+			this.objectNames = objectNames;
+			this.attributeNames = attributeNames;
+			this.objectCount = objectNames.size();
+			this.attributeCount = attributeNames.size();
+		}
+
+		public ContextBuilder attributeNames(List<String> attributeNames) {
+			if (attributeNames.size() != attributeCount) {
+				throw new IllegalArgumentException("Incorrect attribute count");
+			}
+			this.attributeNames = attributeNames;
+			return this;
+		}
+
+		public Context build() {
+			if (objectNames == null) {
+				objectNames = generateLabel(objectCount, "x");
+			}
+
+			if (attributeNames == null) {
+				attributeNames = generateLabel(attributeCount, "y");
+			}
+
+			if (relations == null) {
+				this.relations = new double[objectCount][attributeCount];
+			}
+
+			return new Context(objectNames, attributeNames, relations, null);
+		}
+
+		public ContextBuilder objectNames(List<String> objectNames) {
+			if (objectNames.size() != objectCount) {
+				throw new IllegalArgumentException("Incorrect object count");
+			}
+			this.objectNames = objectNames;
+			return this;
+		}
+		
+		public ContextBuilder relations(double[][] relations) {
+			if (relations.length != objectCount) {
+				throw new IllegalArgumentException("Incorrect object count");
+			}
+
+			if (relations[0].length != attributeCount) {
+				throw new IllegalArgumentException("Incorrect attribute count");
+			}
+			this.relations = relations;
+			return this;
+		}
 	}
 
 	/**
@@ -102,46 +152,28 @@ public class Context {
 	}
 
 	/**
-	 * Generates list of strings with each entry as {prefix + count}
-	 * 
-	 * @param count
-	 *            size of list to generate
-	 * @param prefix
-	 *            prefix to use in constructing strings
-	 * 
-	 * @return list of strings with each entry as {prefix + count}
+	 * Attribute names
 	 */
-	private static ArrayList<String> generateLabel(int count, String prefix) {
-		ArrayList<String> s = new ArrayList<>();
-		for (int i = 1; i <= count; i++) {
-			s.add(prefix + i);
-		}
-		return s;
-	}
-
-	/**
-	 * Boolean cross table of relations.
-	 */
-	private final double[][] relations;
+	private final ArrayList<String> attributeNames;
 
 	/**
 	 * Transition table for descriptions
 	 */
 	private final int[][] descriptionPaths;
 
-	/**
-	 * Attribute names
-	 */
-	private final ArrayList<String> attributeNames;
+	private final Collection<Concept> formalConcepts = new ArrayList<>();
 
 	/**
 	 * Object names
 	 */
 	private final ArrayList<String> objectNames;
 
-	private final Collection<Concept> formalConcepts = new ArrayList<>();
-
 	private final Collection<Concept> preConcepts = new ArrayList<>();
+
+	/**
+	 * Boolean cross table of relations.
+	 */
+	private final double[][] relations;
 
 	private final Collection<Concept> semiConcepts = new ArrayList<>();
 
@@ -166,20 +198,9 @@ public class Context {
 	 * @param paths
 	 */
 	private Context(List<String> objectNames, List<String> attributeNames, double[][] relations, int[][] paths) {
-		if (objectNames == null || objectNames.isEmpty()) {
-			throw new IllegalArgumentException("objectNames is empty");
-		}
-
-		if (attributeNames == null || attributeNames.isEmpty()) {
-			throw new IllegalArgumentException("attributesNames is empty");
-		}
 		this.objectNames = new ArrayList<>(objectNames);
 		this.attributeNames = new ArrayList<>(attributeNames);
-		if (relations == null) {
-			this.relations = new double[objectNames.size()][attributeNames.size()];
-		} else {
-			this.relations = relations;
-		}
+		this.relations = relations;
 		if (paths == null) {
 			this.descriptionPaths = new int[][] {};
 		} else {
@@ -223,7 +244,7 @@ public class Context {
 	 * @param objectIndex
 	 * @param attributeIndex
 	 */
-	public void addRelation(int objectIndex, int attributeIndex, int value) {
+	public void addRelation(int objectIndex, int attributeIndex, double value) {
 		relations[objectIndex][attributeIndex] = value;
 	}
 
@@ -257,7 +278,7 @@ public class Context {
 	 * Makes the relations matrix distinct by collapsing rows that have the same
 	 * attributes and collapses columns that have the same objects.
 	 * 
-	 * See Formal Concept Analysis (Ganter & Wilfe) defintion 23
+	 * See Formal Concept Analysis (Ganter & Wilfe) definition 23
 	 * 
 	 * @return a new formal context with the clarified relations
 	 */
