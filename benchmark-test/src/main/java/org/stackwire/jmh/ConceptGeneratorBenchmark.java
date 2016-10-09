@@ -45,7 +45,7 @@ public class ConceptGeneratorBenchmark {
     public void inclose() {
 		Context fc = Context.create(relations);
 		InCloseConceptGenerator generator = new InCloseConceptGenerator();
-		generator.generateConceptsFor(fc);
+		generator.generateConceptsFor(fc, 0);
 		//fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
     }
     
@@ -53,7 +53,7 @@ public class ConceptGeneratorBenchmark {
     public void naive() {
 		Context fc = Context.create(relations);
 		NaiveConceptGenerator generator = new NaiveConceptGenerator();
-		generator.generateConceptsFor(fc);
+		generator.generateConceptsFor(fc, 0);
 		//fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
     }
 

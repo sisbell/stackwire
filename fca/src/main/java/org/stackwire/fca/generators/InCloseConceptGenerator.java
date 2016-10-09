@@ -50,8 +50,8 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 		inClose(formalContext, 0, 0);
 		for (int i = 0; i < A.size(); i++) {
 			if (!B.get(i).isEmpty()) {
-				Concept concept = Concept.create(new Extent(A.get(i)), new Intent(B.get(i)), ConceptType.FORMAL_CONCEPT,
-						new IndexTag(i));
+				Concept concept = new Concept.ConceptBuilder(new Extent(A.get(i)), new Intent(B.get(i)))
+						.conceptTag(new IndexTag(i)).build();
 				formalContext.addConcept(concept);
 			}
 		}

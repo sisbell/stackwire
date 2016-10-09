@@ -44,8 +44,9 @@ public class ObjectIntersectionConceptGenerator implements ConceptGenerator {
 		Concept inf = Concept.newInfimum(formalContext.attributeCount() - 1);
 		objectsFunction.apply(inf.getIntent().getIndicies());
 
-		formalContext.addConcept(Concept.create(new Extent(objectsFunction.apply(inf.getIntent().getIndicies())),
-				inf.getIntent(), ConceptType.FORMAL_CONCEPT));
+		formalContext
+				.addConcept(new Concept.ConceptBuilder(new Extent(objectsFunction.apply(inf.getIntent().getIndicies())),
+						inf.getIntent()).build());
 
 		for (int g = 0; g < formalContext.objectCount(); g++) {
 			for (Concept concept : formalContext.getConceptsOf(ConceptType.FORMAL_CONCEPT).get()) {
@@ -54,8 +55,8 @@ public class ObjectIntersectionConceptGenerator implements ConceptGenerator {
 				if (intersectIntent.isPresent()) {
 					Intent intent = intersectIntent.get();
 					if (!formalContext.hasConceptOf(intent, ConceptType.FORMAL_CONCEPT)) {
-						Concept newConcept = Concept.create(new Extent(objectsFunction.apply(intent.getIndicies())),
-								intent, ConceptType.FORMAL_CONCEPT);
+						Concept newConcept = new Concept.ConceptBuilder(
+								new Extent(objectsFunction.apply(intent.getIndicies())), intent).build();
 						formalContext.addConcept(newConcept);
 					}
 				}

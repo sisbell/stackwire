@@ -44,8 +44,9 @@ public class AttributeIntersectionConceptGenerator implements ConceptGenerator {
 		Concept inf = Concept.newInfimum(formalContext.attributeCount() - 1);
 		objectsFunction.apply(inf.getIntent().getIndicies());
 
-		formalContext.addConcept(Concept.create(new Extent(objectsFunction.apply(inf.getIntent().getIndicies())),
-				inf.getIntent(), ConceptType.FORMAL_CONCEPT));
+		formalContext
+				.addConcept(new Concept.ConceptBuilder(new Extent(objectsFunction.apply(inf.getIntent().getIndicies())),
+						inf.getIntent()).build());
 
 		for (int m = 0; m < formalContext.attributeCount(); m++) {
 			for (Concept concept : formalContext.getConceptsOf(ConceptType.FORMAL_CONCEPT).get()) {
@@ -54,8 +55,8 @@ public class AttributeIntersectionConceptGenerator implements ConceptGenerator {
 				if (intersectExtent.isPresent()) {
 					Extent extent = intersectExtent.get();
 					if (!formalContext.hasConceptOf(extent, ConceptType.FORMAL_CONCEPT)) {
-						Concept newConcept = Concept.create(extent,
-								new Intent(attributesFunction.apply(extent.getIndicies())), ConceptType.FORMAL_CONCEPT);
+						Concept newConcept = new Concept.ConceptBuilder(extent,
+								new Intent(attributesFunction.apply(extent.getIndicies()))).build();
 						formalContext.addConcept(newConcept);
 					}
 				}

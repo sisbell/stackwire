@@ -14,7 +14,6 @@ import org.stackwire.fca.Concept.Intent;
 import org.stackwire.fca.ConceptGenerator;
 import org.stackwire.fca.ConceptType;
 import org.stackwire.fca.Context;
-import org.stackwire.fca.tags.IndexTag;
 
 public abstract class BaseConceptGeneratorTest {
 
@@ -29,14 +28,14 @@ public abstract class BaseConceptGeneratorTest {
 		Collection<Concept> result = fc.getConceptsOf(ConceptType.FORMAL_CONCEPT).get();
 		assertEquals(4, result.size());
 		// System.out.println(result);
-		Concept fc0 = Concept.create(new Extent(Arrays.asList(1, 3)), new Intent(Arrays.asList(0, 1, 2, 3)),
-				ConceptType.FORMAL_CONCEPT);
-		Concept fc1 = Concept.create(new Extent(Arrays.asList(1, 2, 3)), new Intent(Arrays.asList(1, 2)),
-				ConceptType.FORMAL_CONCEPT);
-		Concept fc2 = Concept.create(new Extent(Arrays.asList(1, 2, 3, 5)), new Intent(Arrays.asList(1)),
-				ConceptType.FORMAL_CONCEPT);
-		Concept fc3 = Concept.create(new Extent(Arrays.asList(0, 1, 2, 3, 4, 5)), new Intent(Arrays.asList()),
-				ConceptType.FORMAL_CONCEPT, new IndexTag(0));
+		Concept fc0 = new Concept.ConceptBuilder(new Extent(Arrays.asList(1, 3)), new Intent(Arrays.asList(0, 1, 2, 3)))
+				.build();
+		Concept fc1 = new Concept.ConceptBuilder(new Extent(Arrays.asList(1, 2, 3)), new Intent(Arrays.asList(1, 2)))
+				.build();
+		Concept fc2 = new Concept.ConceptBuilder(new Extent(Arrays.asList(1, 2, 3, 5)), new Intent(Arrays.asList(1)))
+				.build();
+		Concept fc3 = new Concept.ConceptBuilder(new Extent(Arrays.asList(0, 1, 2, 3, 4, 5)),
+				new Intent(Arrays.asList())).build();
 
 		List<Concept> expectedConcepts = Arrays.asList(fc0, fc1, fc2, fc3);
 		assertTrue(result.containsAll(expectedConcepts));

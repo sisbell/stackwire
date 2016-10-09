@@ -78,42 +78,8 @@ public final class Concept {
 
 	}
 
-	/**
-	 * Create concept
-	 * 
-	 * @param extent
-	 *            extent of the concept
-	 * @param intent
-	 *            intent of concept
-	 * @param conceptType
-	 *            concept type. May be null.
-	 * @return concept
-	 */
-	public static Concept create(Extent extent, Intent intent, ConceptType conceptType) {
-		return new Concept(extent, intent, conceptType, null);
-	}
-
-	/**
-	 * Create concept
-	 * 
-	 * @param extent
-	 *            extent of the concept
-	 * @param intent
-	 *            intent of concept
-	 * @param conceptType
-	 *            concept type. May be null.
-	 * @param conceptTag
-	 *            concept tag for additional meta-information
-	 * 
-	 * @return concept
-	 */
-	public static Concept create(Extent extent, Intent intent, ConceptType conceptType, ConceptTag conceptTag) {
-		return new Concept(extent, intent, conceptType, conceptTag);
-	}
-
 	public static Concept newInfimum(int count) {
-		return Concept.create(new Extent(), new Intent(Utils.range(0, count)), ConceptType.FORMAL_CONCEPT,
-				new IndexTag(0));
+		return new Concept.ConceptBuilder(new Extent(), new Intent(Utils.range(0, count))).build();
 	}
 
 	/**
@@ -125,8 +91,39 @@ public final class Concept {
 	 * @return supremum, which is the formal concept with null attributes
 	 */
 	public static Concept newSupremum(int count) {
-		return Concept.create(new Extent(Utils.range(0, count)), new Intent(), ConceptType.FORMAL_CONCEPT,
-				new IndexTag(0));
+		return new Concept.ConceptBuilder(new Extent(Utils.range(0, count)), new Intent()).conceptTag(new IndexTag(0))
+				.build();
+	}
+
+	public final static class ConceptBuilder {
+
+		private final Extent extent;
+
+		private final Intent intent;
+
+		private ConceptType conceptType;
+
+		private ConceptTag conceptTag;
+
+		public ConceptBuilder(Extent extent, Intent intent) {
+			this.extent = extent;
+			this.intent = intent;
+		}
+
+		public ConceptBuilder conceptType(ConceptType conceptType) {
+			this.conceptType = conceptType;
+			return this;
+		}
+
+		public ConceptBuilder conceptTag(ConceptTag conceptTag) {
+			this.conceptTag = conceptTag;
+			return this;
+		}
+
+		public Concept build() {
+			return new Concept(extent, intent, (conceptType == null) ? ConceptType.FORMAL_CONCEPT : conceptType,
+					conceptTag);
+		}
 	}
 
 	private Extent extent;
