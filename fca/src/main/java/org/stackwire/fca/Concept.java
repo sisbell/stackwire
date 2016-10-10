@@ -28,6 +28,37 @@ import org.stackwire.fca.utils.Utils;
  */
 public final class Concept {
 
+	public final static class ConceptBuilder {
+
+		private ConceptTag conceptTag;
+
+		private ConceptType conceptType;
+
+		private final Extent extent;
+
+		private final Intent intent;
+
+		public ConceptBuilder(Extent extent, Intent intent) {
+			this.extent = extent;
+			this.intent = intent;
+		}
+
+		public Concept build() {
+			return new Concept(extent, intent, (conceptType == null) ? ConceptType.FORMAL_CONCEPT : conceptType,
+					conceptTag);
+		}
+
+		public ConceptBuilder conceptTag(ConceptTag conceptTag) {
+			this.conceptTag = conceptTag;
+			return this;
+		}
+
+		public ConceptBuilder conceptType(ConceptType conceptType) {
+			this.conceptType = conceptType;
+			return this;
+		}
+	}
+
 	/**
 	 * The set of things (objects) to which a concept applies
 	 */
@@ -95,44 +126,13 @@ public final class Concept {
 				.build();
 	}
 
-	public final static class ConceptBuilder {
+	private ConceptTag conceptTag;
 
-		private final Extent extent;
-
-		private final Intent intent;
-
-		private ConceptType conceptType;
-
-		private ConceptTag conceptTag;
-
-		public ConceptBuilder(Extent extent, Intent intent) {
-			this.extent = extent;
-			this.intent = intent;
-		}
-
-		public ConceptBuilder conceptType(ConceptType conceptType) {
-			this.conceptType = conceptType;
-			return this;
-		}
-
-		public ConceptBuilder conceptTag(ConceptTag conceptTag) {
-			this.conceptTag = conceptTag;
-			return this;
-		}
-
-		public Concept build() {
-			return new Concept(extent, intent, (conceptType == null) ? ConceptType.FORMAL_CONCEPT : conceptType,
-					conceptTag);
-		}
-	}
+	private ConceptType conceptType;
 
 	private Extent extent;
 
 	private Intent intent;
-
-	private ConceptType conceptType;
-
-	private ConceptTag conceptTag;
 
 	private Concept(Extent extent, ConceptType conceptType, ConceptTag conceptTag) {
 		this.conceptTag = conceptTag;

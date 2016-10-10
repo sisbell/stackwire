@@ -21,7 +21,6 @@ import org.stackwire.fca.Concept;
 import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
 import org.stackwire.fca.ConceptGenerator;
-import org.stackwire.fca.ConceptType;
 import org.stackwire.fca.Context;
 import org.stackwire.fca.tags.IndexTag;
 

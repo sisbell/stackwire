@@ -358,7 +358,7 @@ public class Context {
 		return Optional.empty();
 	}
 
-	public Optional<Collection<Concept>> getConceptsOfLive(ConceptType type) {
+	private Optional<Collection<Concept>> getConceptsOfLive(ConceptType type) {
 		if (ConceptType.FORMAL_CONCEPT.equals(type)) {
 			return Optional.of(formalConcepts);
 		} else if (ConceptType.PRECONCEPT.equals(type)) {
