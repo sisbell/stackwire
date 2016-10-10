@@ -93,14 +93,14 @@ public class SchemaInputParser implements InputParser {
 		while (iter.hasNext()) {
 			Triple t = iter.next();
 
-			String subject = t.getSubject().getURI();
+			String subject = t.getSubject().getLocalName();
 			String predicate = t.getPredicate().getURI();
 
 			if ("http://schema.org/domainIncludes".equals(predicate)) {
-				getOrCreateNode(t.getObject().getURI(), graph).properties.add(subject);
+				getOrCreateNode(t.getObject().getLocalName(), graph).properties.add(subject);
 				result.attributeNames.add(subject);
 			} else if ("http://www.w3.org/2000/01/rdf-schema#subClassOf".equals(predicate)) {
-				getOrCreateNode(t.getObject().getURI(), graph).children.add(getOrCreateNode(subject, graph));
+				getOrCreateNode(t.getObject().getLocalName(), graph).children.add(getOrCreateNode(subject, graph));
 			}
 		}
 		return result;
