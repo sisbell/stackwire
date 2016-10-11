@@ -117,7 +117,7 @@ public class Context {
 			this.objectNames = objectNames;
 			return this;
 		}
-		
+
 		public ContextBuilder relations(double[][] relations) {
 			if (relations.length != objectCount) {
 				throw new IllegalArgumentException("Incorrect object count");
@@ -176,18 +176,6 @@ public class Context {
 	private final double[][] relations;
 
 	private final Collection<Concept> semiConcepts = new ArrayList<>();
-
-	/**
-	 * Constructor
-	 * 
-	 * @param objectNames
-	 *            object names
-	 * @param attributeNames
-	 *            attribute names
-	 */
-	private Context(List<String> objectNames, List<String> attributeNames) {
-		this(objectNames, attributeNames, null, null);
-	}
 
 	/**
 	 * Constructor
@@ -285,16 +273,18 @@ public class Context {
 	public Context clarify() {
 		ClarifierResult result = Clarifier.clarify(relations);
 
-		List<String> newObjectNames = new ArrayList<String>(objectNames);
-		for (int rowIndex : result.getDuplicateRows()) {
-			newObjectNames.remove(rowIndex);
+		List<String> newObjectNames = new ArrayList<>();
+		List<String> newAttributeNames = new ArrayList<>();
+
+		for (Set<Integer> row : result.getCollapsedRows()) {
+			String collapsedRow = row.stream().map(m -> objectNames.get(m)).collect(Collectors.joining(":"));
+			newObjectNames.add(collapsedRow);
 		}
 
-		List<String> newAttributeNames = new ArrayList<String>(attributeNames);
-		for (int columnIndex : result.getDuplicateColumns()) {
-			newAttributeNames.remove(columnIndex);
+		for (Set<Integer> col : result.getCollapsedColumns()) {
+			String collapsedCol = col.stream().map(m -> attributeNames.get(m)).collect(Collectors.joining(":"));
+			newAttributeNames.add(collapsedCol);
 		}
-
 		return Context.create(newObjectNames, newAttributeNames, result.getClarifiedCrossTable(), descriptionPaths);
 	}
 

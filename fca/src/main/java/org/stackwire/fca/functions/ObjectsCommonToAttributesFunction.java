@@ -23,7 +23,8 @@ import java.util.function.Function;
 import org.stackwire.fca.utils.Utils;
 
 /**
- * This is operator A'
+ * This is operator A'. It returns a set of objects that are common to a
+ * collection of attributes.
  */
 public class ObjectsCommonToAttributesFunction implements Function<Collection<Integer>, Set<Integer>> {
 

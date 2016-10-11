@@ -21,23 +21,10 @@ import java.io.InputStream;
 import org.stackwire.fca.ConceptGenerator;
 import org.stackwire.fca.Context;
 
-/**
- * Service for creating a formal context from the specified input
- */
-public interface InputParser {
+public class ProtobufIContextReader implements ContextReader {
 
-	/**
-	 * Parse input stream and return formal context. It is required that the
-	 * returned formal context must already have all concepts generated.
-	 * 
-	 * @param inputStream
-	 *            input stream to parse
-	 * @return formal context
-	 * @param generator
-	 *            the concept generator to use for adding concepts
-	 * @throws IOException
-	 *             if I/O or validation exception with stream
-	 */
-	Context parse(InputStream inputStream, ConceptGenerator generator) throws IOException;
-
+	@Override
+	public Context read(InputStream inputStream, ConceptGenerator generator) throws IOException {
+		return null;
+	}
 }

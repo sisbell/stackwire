@@ -74,10 +74,8 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 			A.add(rnew, new ArrayList<Integer>());
 			B.add(rnew, new ArrayList<Integer>());
 			for (int i : A.get(r)) {
-				if (formalContext.hasRelation(i, j, threshold)) {
-					if (!A.get(rnew).contains(i)) {
-						A.get(rnew).add(i);
-					}
+				if (formalContext.hasRelation(i, j, threshold) && !A.get(rnew).contains(i)) {
+					A.get(rnew).add(i);
 				}
 			}
 			if (!A.get(rnew).isEmpty()) {
@@ -102,7 +100,7 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 	protected boolean isCanonical(Context formalContext, int r, int rnew, int y) {
 		for (int k = B.get(r).size() - 1; k >= 0; k--) {
 			for (int j = y; j >= B.get(r).get(k) + 1; j--) {
-				int h = 0;
+				int h;
 				for (h = 0; h <= A.get(rnew).size() - 1; h++) {
 					if (!formalContext.hasRelation(A.get(rnew).get(h), j, threshold)) {
 						break;
@@ -116,7 +114,7 @@ public final class InCloseConceptGenerator implements ConceptGenerator {
 		}
 
 		for (int j = y; j >= 0; j--) {
-			int h = 0;
+			int h;
 			for (h = 0; h <= A.get(rnew).size() - 1; h++) {
 				if (!formalContext.hasRelation(A.get(rnew).get(h), j, threshold)) {
 					break;

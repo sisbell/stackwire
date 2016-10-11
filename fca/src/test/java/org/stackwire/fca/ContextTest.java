@@ -30,8 +30,8 @@ public class ContextTest {
 		Context fc = new Context.ContextBuilder(relations).build();
 		Context clarifiedContext = fc.clarify();
 
-		assertTrue(clarifiedContext.getObjectNames().containsAll(Arrays.asList("x1", "x2", "x3", "x5")));
-		assertTrue(clarifiedContext.getAttributeNames().containsAll(Arrays.asList("y1", "y2", "y3")));
+		assertTrue(clarifiedContext.getObjectNames().containsAll(Arrays.asList("x1", "x2", "x3:x4", "x5")));
+		assertTrue(clarifiedContext.getAttributeNames().containsAll(Arrays.asList("y1", "y2", "y3:y4")));
 	}
 
 	/**

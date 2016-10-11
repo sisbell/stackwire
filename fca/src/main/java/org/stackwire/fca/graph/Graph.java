@@ -21,21 +21,21 @@ import java.util.Set;
 public class Graph {
 
 	private HashMap<String, Node> nodes = new HashMap<>();
-	
+
 	public void add(Node node) {
-		if(!contains(node.label)) {
+		if (!contains(node.label)) {
 			nodes.put(node.label, node);
-		}		
+		}
 	}
-	
-	public Node get(String label) {
-		return nodes.get(label);
-	}
-	
+
 	public boolean contains(String label) {
 		return nodes.containsKey(label);
 	}
-	
+
+	public Node get(String label) {
+		return nodes.get(label);
+	}
+
 	public Set<String> labels() {
 		return nodes.keySet();
 	}

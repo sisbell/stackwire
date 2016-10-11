@@ -22,16 +22,17 @@ import java.util.Set;
 
 public class Node {
 
-	public String label;
-	
-	public Set<String> properties = new HashSet<>();
-	
 	public Collection<Node> children = new ArrayList<>();
-	
-	public Node() { }
-	
+
+	public String label;
+
+	public Set<String> properties = new HashSet<>();
+
+	public Node() {
+	}
+
 	public Node(String label) {
 		this.label = label;
 	}
-	
+
 }

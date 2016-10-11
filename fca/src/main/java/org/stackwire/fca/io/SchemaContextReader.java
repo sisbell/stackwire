@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.jena.graph.Triple;
@@ -37,19 +36,33 @@ import org.stackwire.fca.Context;
 import org.stackwire.fca.graph.Graph;
 import org.stackwire.fca.graph.Node;
 
-public class SchemaInputParser implements InputParser {
+/**
+ * Reader for schema.org n-triple format.
+ */
+public final class SchemaContextReader implements ContextReader {
 
-	public class GraphResult {
-		
+	protected final class GraphResult {
+
 		public final Set<String> attributeNames = new HashSet<>();
-		
+
 		public final Graph graph;
-		
+
 		public GraphResult(Graph graph) {
 			this.graph = graph;
 		}
 	}
 
+	/**
+	 * Returns the node with the specified label, if it exists. Otherwise, it
+	 * creates the node and adds it to the specified graph prior to returning
+	 * the node.
+	 * 
+	 * @param label
+	 *            label of the node
+	 * @param graph
+	 *            graph
+	 * @return node with the specified label
+	 */
 	private static Node getOrCreateNode(String label, Graph graph) {
 		Node node = graph.get(label);
 		if (node == null) {
@@ -58,17 +71,25 @@ public class SchemaInputParser implements InputParser {
 		}
 		return node;
 	}
-	
-	public Context buildContext(Graph graph, Set<String> attributeNames) {
+
+	/**
+	 * Builds a context for the specified graph
+	 * 
+	 * @param graph
+	 *            graph
+	 * @param attributeNames
+	 *            attribute names
+	 * 
+	 * @return context
+	 */
+	protected Context buildContext(Graph graph, Set<String> attributeNames) {
 		List<String> attributes = new ArrayList<>(attributeNames);
 		List<String> objects = new ArrayList<>(graph.labels());
 
 		double[][] table = new double[objects.size()][attributes.size()];
 
-		Node thingNode = graph.get("http://schema.org/Thing");
-
 		Queue<Node> queue = new LinkedList<>();
-		queue.add(thingNode);
+		queue.add(graph.get("Thing"));
 		while (!queue.isEmpty()) {
 			Node parent = queue.poll();
 			if (parent != null) {
@@ -86,10 +107,18 @@ public class SchemaInputParser implements InputParser {
 		return new Context.ContextBuilder(objects, attributes).relations(table).build();
 	}
 
-	public GraphResult buildGraph(PipedRDFIterator<Triple> iter) {
+	/**
+	 * Builds a graph from a set of n-triples iterator
+	 * 
+	 * @param iter
+	 *            n-triples iterator
+	 * 
+	 * @return graph
+	 */
+	protected GraphResult buildGraph(PipedRDFIterator<Triple> iter) {
 		Graph graph = new Graph();
 		GraphResult result = new GraphResult(graph);
-		
+
 		while (iter.hasNext()) {
 			Triple t = iter.next();
 
@@ -107,21 +136,12 @@ public class SchemaInputParser implements InputParser {
 	}
 
 	@Override
-	public Context parse(InputStream inputStream, ConceptGenerator generator) throws IOException {
+	public Context read(InputStream inputStream, ConceptGenerator generator) throws IOException {
 
-		PipedRDFIterator<Triple> iter = new PipedRDFIterator<Triple>();
+		PipedRDFIterator<Triple> iter = new PipedRDFIterator<>();
 		final PipedRDFStream<Triple> input = new PipedTriplesStream(iter);
 
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-
-		Runnable parser = new Runnable() {
-			@Override
-			public void run() {
-				RDFDataMgr.parse(input, inputStream, Lang.TURTLE);
-			}
-		};
-
-		executor.submit(parser);
+		Executors.newSingleThreadExecutor().submit(() -> RDFDataMgr.parse(input, inputStream, Lang.TURTLE));
 
 		GraphResult result = buildGraph(iter);
 		return buildContext(result.graph, result.attributeNames);

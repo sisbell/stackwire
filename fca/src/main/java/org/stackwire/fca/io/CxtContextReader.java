@@ -21,10 +21,10 @@ import java.io.InputStream;
 import org.stackwire.fca.ConceptGenerator;
 import org.stackwire.fca.Context;
 
-public class CxtInputParser implements InputParser {
+public class CxtContextReader implements ContextReader {
 
 	@Override
-	public Context parse(InputStream inputStream, ConceptGenerator generator) throws IOException {
+	public Context read(InputStream inputStream, ConceptGenerator generator) throws IOException {
 		return null;
 	}
 

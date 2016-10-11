@@ -63,10 +63,7 @@ public class SemanticIndexSet {
 		if (getClass() != obj.getClass())
 			return false;
 		SemanticIndexSet other = (SemanticIndexSet) obj;
-		if (indicies == null) {
-			if (other.getIndicies() != null)
-				return false;
-		} else if (!indicies.containsAll(other.getIndicies()) || !other.getIndicies().containsAll(indicies))
+		if (!indicies.containsAll(other.getIndicies()) || !other.getIndicies().containsAll(indicies))
 			return false;
 		return true;
 	}
@@ -104,7 +101,7 @@ public class SemanticIndexSet {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((indicies == null) ? 0 : indicies.hashCode());
+		result = prime * result + indicies.hashCode();
 		return result;
 	}
 

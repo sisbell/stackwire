@@ -33,4 +33,15 @@ public class ClarifierTest {
 		assertTrue(Arrays.deepEquals(expected, result));
 
 	}
+	
+	@Test
+	public void clarify2() throws Exception {
+		double[][] crossTable = { { 1, 1, 1, 1 }, { 1, 1, 1, 1 }, { 1, 1, 1, 1 }, { 1, 1, 1, 1 }, { 1, 1, 1, 1 } };
+		double[][] expected = { { 1, 1, 1, 1 } };
+
+		double[][] result = Clarifier.clarify(crossTable).getClarifiedCrossTable();
+
+		assertTrue(Arrays.deepEquals(expected, result));
+
+	}
 }

@@ -27,7 +27,7 @@ import org.stackwire.fca.functions.ObjectsCommonToAttributesFunction;
  */
 public enum ConceptType {
 
-	UNKNOWN, FORMAL_CONCEPT, PRECONCEPT, SEMICONCEPT;
+	FORMAL_CONCEPT, PRECONCEPT, SEMICONCEPT, UNKNOWN;
 
 	/**
 	 * Returns concept type

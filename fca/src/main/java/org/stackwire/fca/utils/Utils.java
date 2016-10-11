@@ -39,7 +39,7 @@ public class Utils {
 
 			boolean isDuplicationColumn = true;
 			for (int i = 0; i < crossTable.length; i++) {
-				if (sourceColumn[i] != crossTable[i][j]) {
+				if (Math.abs(sourceColumn[i] - crossTable[i][j]) > .0000001) {
 					isDuplicationColumn = false;
 					break;
 				}
@@ -96,7 +96,7 @@ public class Utils {
 	 *            columns to remove from cross table
 	 * @return
 	 */
-	public static double[][] remove(double crossTable[][], Collection<Integer> rowsToRemove,
+	public static double[][] remove(double[][] crossTable, Collection<Integer> rowsToRemove,
 			Collection<Integer> columnsToRemove) {
 		if (crossTable == null) {
 			throw new IllegalArgumentException("crossTable is null");
@@ -115,7 +115,7 @@ public class Utils {
 
 		int rows = crossTable.length;
 		int columns = crossTable[0].length;
-		double newCrossTable[][] = new double[rows - rowsToRemove.size()][columns - columnsToRemove.size()];
+		double[][] newCrossTable = new double[rows - rowsToRemove.size()][columns - columnsToRemove.size()];
 
 		int newRow = 0;
 		for (int i = 0; i < rows; ++i) {

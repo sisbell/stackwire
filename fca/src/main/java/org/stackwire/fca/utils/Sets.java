@@ -16,11 +16,30 @@
 package org.stackwire.fca.utils;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Sets {
+
+	public static Set<Integer> intersect(Set<Set<Integer>> set) {
+		Iterator<Set<Integer>> it = set.iterator();
+		Set<Integer> result = it.next();
+		while (it.hasNext()) {
+			result = com.google.common.collect.Sets.intersection(result,
+					com.google.common.collect.Sets.newHashSet(it.next()));
+		}
+		return result;
+	}
+
+	public static Set<Integer> singletonSet(Integer integer) {
+		return com.google.common.collect.Sets.newHashSet(integer);
+	}
+	
+	public static Collection<Set<Integer>> wrapSets(Collection<Integer> collection) {
+		return collection.stream().map(m -> singletonSet(m)).collect(Collectors.toSet());
+	}
 
 	public static Set<Set<Integer>> toSets(SemanticIndexSet... indexSet) {
 		Set<Set<Integer>> items = Arrays.stream(indexSet).map(SemanticIndexSet::getIndicies)
@@ -31,13 +50,9 @@ public class Sets {
 		return items;
 	}
 
-	public static Set<Integer> intersect(Set<Set<Integer>> set) {
-		Iterator<Set<Integer>> it = set.iterator();
-		Set<Integer> result = it.next();
-		while (it.hasNext()) {
-			result = com.google.common.collect.Sets.intersection(result,
-					com.google.common.collect.Sets.newHashSet(it.next()));
-		}
-		return result;
+	public static Set<Integer> union(Set<Integer> dr, Integer i) {
+		Set<Integer> s = com.google.common.collect.Sets.newHashSet(dr);
+		s.add(i);
+		return s;
 	}
 }

@@ -13,26 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.stackwire.fca;
+package org.stackwire.fca.io;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 
-import org.stackwire.fca.io.ContextReader;
+import org.stackwire.fca.Context;
 
-public final class FCA {
+/**
+ * Service for writing context to an output stream.
+ */
+public interface ContextWriter {
 
-	private final ConceptGenerator generator;
-
-	private final ContextReader inputParser;
-
-	public FCA(ConceptGenerator generator, ContextReader inputParser) {
-		this.generator = generator;
-		this.inputParser = inputParser;
-	}
-
-	public Context generateFrom(InputStream input) throws IOException {
-		return inputParser.read(input, generator);
-		// return generator.generateConceptsFor(ctx);
-	}
+	void write(OutputStream outputStream, Context context) throws IOException;
 }
