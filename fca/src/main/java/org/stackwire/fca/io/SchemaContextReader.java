@@ -19,9 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
@@ -73,41 +70,6 @@ public final class SchemaContextReader implements ContextReader {
 	}
 
 	/**
-	 * Builds a context for the specified graph
-	 * 
-	 * @param graph
-	 *            graph
-	 * @param attributeNames
-	 *            attribute names
-	 * 
-	 * @return context
-	 */
-	protected Context buildContext(Graph graph, Set<String> attributeNames) {
-		List<String> attributes = new ArrayList<>(attributeNames);
-		List<String> objects = new ArrayList<>(graph.labels());
-
-		double[][] table = new double[objects.size()][attributes.size()];
-
-		Queue<Node> queue = new LinkedList<>();
-		queue.add(graph.get("Thing"));
-		while (!queue.isEmpty()) {
-			Node parent = queue.poll();
-			if (parent != null) {
-				int objectIndex = objects.indexOf(parent.label);
-				for (String property : parent.properties) {
-					table[objectIndex][attributes.indexOf(property)] = 1;
-				}
-				for (Node child : parent.children) {
-					child.properties.addAll(parent.properties);
-					queue.add(child);
-				}
-			}
-		}
-
-		return new Context.ContextBuilder(objects, attributes).relations(table).build();
-	}
-
-	/**
 	 * Builds a graph from a set of n-triples iterator
 	 * 
 	 * @param iter
@@ -144,7 +106,8 @@ public final class SchemaContextReader implements ContextReader {
 		Executors.newSingleThreadExecutor().submit(() -> RDFDataMgr.parse(input, inputStream, Lang.TURTLE));
 
 		GraphResult result = buildGraph(iter);
-		return buildContext(result.graph, result.attributeNames);
+		return new Context.ContextBuilder(result.graph, result.graph.get("Thing"),
+				new ArrayList<String>(result.attributeNames)).build();
 	}
 
 }

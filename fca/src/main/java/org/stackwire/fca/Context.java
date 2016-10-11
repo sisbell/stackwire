@@ -18,14 +18,18 @@ package org.stackwire.fca;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.stackwire.fca.Clarifier.ClarifierResult;
 import org.stackwire.fca.Concept.Extent;
 import org.stackwire.fca.Concept.Intent;
+import org.stackwire.fca.graph.Graph;
+import org.stackwire.fca.graph.Node;
 import org.stackwire.fca.utils.Utils;
 
 import com.google.common.collect.Sets;
@@ -67,6 +71,10 @@ public class Context {
 		private List<String> objectNames;
 
 		private double[][] relations;
+		
+		private Node root;
+		
+		private Graph graph;
 
 		public ContextBuilder(double[][] relations) {
 			this.relations = relations;
@@ -84,6 +92,40 @@ public class Context {
 			this.attributeNames = attributeNames;
 			this.objectCount = objectNames.size();
 			this.attributeCount = attributeNames.size();
+		}
+		
+		public ContextBuilder(Graph graph, Node root, List<String> attributeNames) {
+			this.objectNames = new ArrayList<>(graph.labels());
+			this.attributeNames = attributeNames;
+			this.objectCount = objectNames.size();
+			this.attributeCount = attributeNames.size();
+			this.root = root;
+			this.graph = graph;
+		}
+
+		protected Context buildContext(Graph graph, Set<String> attributeNames) {
+			List<String> attributes = new ArrayList<>(attributeNames);
+			List<String> objects = new ArrayList<>(graph.labels());
+
+			double[][] table = new double[objects.size()][attributes.size()];
+
+			Queue<Node> queue = new LinkedList<>();
+			queue.add(graph.get("Thing"));
+			while (!queue.isEmpty()) {
+				Node parent = queue.poll();
+				if (parent != null) {
+					int objectIndex = objects.indexOf(parent.label);
+					for (String property : parent.properties) {
+						table[objectIndex][attributes.indexOf(property)] = 1;
+					}
+					for (Node child : parent.children) {
+						child.properties.addAll(parent.properties);
+						queue.add(child);
+					}
+				}
+			}
+
+			return new Context.ContextBuilder(objects, attributes).relations(table).build();
 		}
 
 		public ContextBuilder attributeNames(List<String> attributeNames) {
@@ -104,8 +146,26 @@ public class Context {
 			}
 
 			if (relations == null) {
-				this.relations = new double[objectCount][attributeCount];
+				this.relations = new double[objectCount][attributeCount];		
 			}
+			
+			if(graph != null) {
+				Queue<Node> queue = new LinkedList<>();
+				queue.add(root);
+				while (!queue.isEmpty()) {
+					Node parent = queue.poll();
+					if (parent != null) {
+						int objectIndex = objectNames.indexOf(parent.label);
+						for (String property : parent.properties) {
+							relations[objectIndex][attributeNames.indexOf(property)] = 1;
+						}
+						for (Node child : parent.children) {
+							child.properties.addAll(parent.properties);
+							queue.add(child);
+						}
+					}
+				}
+			} 
 
 			return new Context(objectNames, attributeNames, relations, null);
 		}
