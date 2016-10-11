@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.stackwire.fca.utils.Pair;
 import org.stackwire.fca.utils.Sets;
 import org.stackwire.fca.utils.Utils;
 
@@ -77,50 +78,6 @@ public final class Clarifier {
 
 	}
 
-	public static ClarifierResult rowClarify(double[][] crossTable) {
-		Set<Integer> duplicateRows = new HashSet<>();
-		Collection<Set<Integer>> collapsedRows = new ArrayList<>();
-		for (int i = 0; i < crossTable.length - 1; i++) {
-			Set<Integer> dr = duplicateRows(crossTable, crossTable[i], i + 1, duplicateRows);
-			if (!dr.isEmpty()) {
-				duplicateRows.addAll(dr);
-				collapsedRows.add(Sets.union(dr, i));
-			} else if (!duplicateRows.contains(i)) {
-				collapsedRows.add(Sets.singletonSet(i));
-			}
-		}
-
-		if (!duplicateRows.contains(crossTable.length - 1)) {
-			collapsedRows.add(Sets.singletonSet(crossTable.length - 1));
-		}
-		return new ClarifierResult(remove(crossTable, duplicateRows, null), collapsedRows,
-				Sets.wrapSets(Utils.rangeSet(0, crossTable.length)));
-	}
-
-	public static ClarifierResult columnClarify(double[][] crossTable) {
-		Set<Integer> duplicateColumns = new HashSet<>();
-		Collection<Set<Integer>> collapsedColumns = new ArrayList<>();
-		for (int j = 0; j < crossTable[0].length - 1; j++) {
-			double[] sourceColumn = new double[crossTable.length];
-			for (int i = 0; i < crossTable.length - 1; i++) {
-				sourceColumn[i] = crossTable[i][j];
-			}
-			Set<Integer> dc = duplicateColumns(crossTable, sourceColumn, j + 1, duplicateColumns);
-			if (!dc.isEmpty()) {
-				collapsedColumns.add(Sets.union(dc, j));
-				duplicateColumns.addAll(dc);
-			} else if (!duplicateColumns.contains(j)) {
-				collapsedColumns.add(Sets.singletonSet(j));
-			}
-		}
-
-		if (!duplicateColumns.contains(crossTable[0].length - 1)) {
-			collapsedColumns.add(Sets.singletonSet(crossTable[0].length - 1));
-		}
-		return new ClarifierResult(remove(crossTable, null, duplicateColumns),
-				Sets.wrapSets(Utils.rangeSet(0, crossTable[0].length)), collapsedColumns);
-	}
-
 	/**
 	 * Removes duplicate rows and duplicate columns from the specified cross
 	 * table and returns results
@@ -130,22 +87,20 @@ public final class Clarifier {
 	 * @return results clarifier result
 	 */
 	public static ClarifierResult clarify(double[][] crossTable) {
-		Set<Integer> duplicateRows = new HashSet<>();
-		Collection<Set<Integer>> collapsedRows = new ArrayList<>();
-		for (int i = 0; i < crossTable.length - 1; i++) {
-			Set<Integer> dr = duplicateRows(crossTable, crossTable[i], i + 1, duplicateRows);
-			if (!dr.isEmpty()) {
-				duplicateRows.addAll(dr);
-				collapsedRows.add(Sets.union(dr, i));
-			} else if (!duplicateRows.contains(i)) {
-				collapsedRows.add(Sets.singletonSet(i));
-			}
-		}
 
-		if (!duplicateRows.contains(crossTable.length - 1)) {
-			collapsedRows.add(Sets.singletonSet(crossTable.length - 1));
-		}
+		Pair<Set<Integer>, Collection<Set<Integer>>> row = processRows(crossTable);
+		Pair<Set<Integer>, Collection<Set<Integer>>> column = processColumns(crossTable);
 
+		return new ClarifierResult(remove(crossTable, row.t, column.t), row.u, column.u);
+	}
+
+	public static ClarifierResult columnClarify(double[][] crossTable) {
+		Pair<Set<Integer>, Collection<Set<Integer>>> column = processColumns(crossTable);
+		return new ClarifierResult(remove(crossTable, null, column.t),
+				Sets.wrapSets(Utils.rangeSet(0, crossTable[0].length)), column.u);
+	}
+
+	private static Pair<Set<Integer>, Collection<Set<Integer>>> processColumns(double[][] crossTable) {
 		Set<Integer> duplicateColumns = new HashSet<>();
 		Collection<Set<Integer>> collapsedColumns = new ArrayList<>();
 		for (int j = 0; j < crossTable[0].length - 1; j++) {
@@ -165,9 +120,32 @@ public final class Clarifier {
 		if (!duplicateColumns.contains(crossTable[0].length - 1)) {
 			collapsedColumns.add(Sets.singletonSet(crossTable[0].length - 1));
 		}
+		return new Pair<>(duplicateColumns, collapsedColumns);
+	}
 
-		return new ClarifierResult(remove(crossTable, duplicateRows, duplicateColumns), collapsedRows,
-				collapsedColumns);
+	private static Pair<Set<Integer>, Collection<Set<Integer>>> processRows(double[][] crossTable) {
+		Set<Integer> duplicateRows = new HashSet<>();
+		Collection<Set<Integer>> collapsedRows = new ArrayList<>();
+		for (int i = 0; i < crossTable.length - 1; i++) {
+			Set<Integer> dr = duplicateRows(crossTable, crossTable[i], i + 1, duplicateRows);
+			if (!dr.isEmpty()) {
+				duplicateRows.addAll(dr);
+				collapsedRows.add(Sets.union(dr, i));
+			} else if (!duplicateRows.contains(i)) {
+				collapsedRows.add(Sets.singletonSet(i));
+			}
+		}
+
+		if (!duplicateRows.contains(crossTable.length - 1)) {
+			collapsedRows.add(Sets.singletonSet(crossTable.length - 1));
+		}
+		return new Pair<>(duplicateRows, collapsedRows);
+	}
+
+	public static ClarifierResult rowClarify(double[][] crossTable) {
+		Pair<Set<Integer>, Collection<Set<Integer>>> row = processRows(crossTable);
+		return new ClarifierResult(remove(crossTable, row.t, null), row.u,
+				Sets.wrapSets(Utils.rangeSet(0, crossTable.length)));
 	}
 
 	private Clarifier() {
